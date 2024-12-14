@@ -1,0 +1,1460 @@
+(************* Replacement rules for type of 2HDM, functions, field redefinitions, and mass eigenstates to work in the physical basis ************)
+(* Definitions matched in paper  *)
+
+
+(* Functions replace variables when expansion is called up to order 1/LambdaCutoff^2 *)
+
+ee[LambdaCutoff_] := g1 gw (1 - Hold[xWB g1 gw / (g1^2 + gw^2)] / LambdaCutoff^2) / Sqrt[g1^2 + gw^2];
+ee[LambdaCutoff_] := g1 gw (1 - Hold[xWB g1 gw / (g1^2 + gw^2)] / LambdaCutoff^2) / Sqrt[g1^2 + gw^2];
+
+mA2[LambdaCutoff_] := mA2 + dmA2/LambdaCutoff^2;
+mH2[LambdaCutoff_] := mH2 + dmH2/LambdaCutoff^2;
+mh2[LambdaCutoff_] := mh2 + dmh2/LambdaCutoff^2;
+
+mAH2[LambdaCutoff_] := mAH2 + dmAH2/LambdaCutoff^2;
+mAh2[LambdaCutoff_] := mAh2 + dmAh2/LambdaCutoff^2;
+
+(* Exact expressions of angles are commented out since they're long *)
+(*
+    Sinbetah[LambdaCutoff_] := Sin[beta]*(1 - Hold[((dM11p2 + dM22p2)/(M11p2 + M22p2) - dM22p2 / M22p2)] / (2*LambdaCutoff^2));
+    Cosbetah[LambdaCutoff_] := Cos[beta]*(1 - Hold[((dM11p2 + dM22p2)/(M11p2 + M22p2) - dM11p2 / M11p2)] / (2*LambdaCutoff^2));
+    Sinbetahpm[LambdaCutoff_] := Sin[beta]*(1 - Hold[((dM11pm2 + dM22pm2)/(2*(M11pm2 - M22pm2)) + dM22pm2 / (2*M22pm2))] / LambdaCutoff^2);
+    Cosbetahpm[LambdaCutoff_] := Cos[beta]*(1 - Hold[((dM11pm2 + dM22pm2)/(2*(M11pm2 - M22pm2)) + dM11pm2 / (2*M11pm2))] / LambdaCutoff^2);
+*)
+
+
+(* Exact expression needed if one needs to find the dimension-six contributions to the angle *)
+
+(*
+Cosxih[LambdaCutoff_] := Sqrt[ ( mAH2[LambdaCutoff]^2 + mAh2[LambdaCutoff]^2 + (mA2[LambdaCutoff] - mh22[LambdaCutoff])*(mA2[LambdaCutoff] + mh22[LambdaCutoff] - mh32[LambdaCutoff] - mh12[LambdaCutoff]) )/( (mh12[LambdaCutoff] - mh22[LambdaCutoff])*(mh22[LambdaCutoff] - mh32[LambdaCutoff]) ) ];
+
+Cosomegah[LambdaCutoff_] := Sqrt[ ( mA2[LambdaCutoff] - mh22[LambdaCutoff] + Cosxih[LambdaCutoff]^2*(mh22[LambdaCutoff] - mh12[LambdaCutoff]) )/( Cosxih[LambdaCutoff]^2*(mh32[LambdaCutoff] - mh12[LambdaCutoff]) ) ];
+
+
+Sinxih[LambdaCutoff_] := Sqrt[1 - Cosxih[LambdaCutoff]^2];
+
+Sinomegah[LambdaCutoff_] := Sqrt[1 - Cosomegah[LambdaCutoff]^2];
+
+Cos[xi] = Limit[Cosxih[LambdaCutoff], LambdaCutoff -> \[Infinity]];
+Sin[xi] = Limit[Sinxih[LambdaCutoff], LambdaCutoff -> \[Infinity]];
+Cos[omega] = Limit[Cosomegah[LambdaCutoff], LambdaCutoff -> \[Infinity]];
+Sin[omega] = Limit[Sinomegah[LambdaCutoff], LambdaCutoff -> \[Infinity]];
+
+dcxhp = (Limit[Cosxih[LambdaCutoff], LambdaCutoff -> \[Infinity]] - Series[Cosxih[LambdaCutoff], {LambdaCutoff, \[Infinity], 2}])/Cos[xih] // Normal;
+dsxhp = (Limit[Sinxih[LambdaCutoff], LambdaCutoff -> \[Infinity]] - Series[Sinxih[LambdaCutoff], {LambdaCutoff, \[Infinity], 2}])/Sin[xih] // Normal;
+dcwhp = (Limit[Cosomegah[LambdaCutoff], LambdaCutoff -> \[Infinity]] - Series[Cosomegah[LambdaCutoff], {LambdaCutoff, \[Infinity], 2}])/Cos[omegah] // Normal;
+dswhp = (Limit[Sinomegah[LambdaCutoff], LambdaCutoff -> \[Infinity]] - Series[Sinomegah[LambdaCutoff], {LambdaCutoff, \[Infinity], 2}])/Sin[omegah] // Normal;
+
+UpdateParameters[ dcxh -> dcxhp, dsxh -> dsxhp, dcwh -> dcwhp, dswh -> dswhp ];
+*)
+
+
+(* Mass eigenvalues for 3x3 *)
+(* Exact expression needed if one needs to find the dimension-six contributions to the masses *)
+
+(* b3 = |b|, p3 = |p|, and q3 = |q| are written in absolute value *)
+
+b3[LambdaCutoff_] := mA2[LambdaCutoff] + mH2[LambdaCutoff] + mh2[LambdaCutoff];
+c3[LambdaCutoff_] := mH2[LambdaCutoff]*mh2[LambdaCutoff] + mA2[LambdaCutoff]*(mH2[LambdaCutoff] + mh2[LambdaCutoff]) - mAH2[LambdaCutoff]^2 - mAh2[LambdaCutoff]^2;
+d3[LambdaCutoff_] := mAH2[LambdaCutoff]^2*mh2[LambdaCutoff] + mAh2[LambdaCutoff]^2*mH2[LambdaCutoff] - mA2[LambdaCutoff]*mH2[LambdaCutoff]*mh2[LambdaCutoff];
+
+p3[LambdaCutoff_] := 1/9*(b3[LambdaCutoff]^2 - 3*c3[LambdaCutoff]);
+q3[LambdaCutoff_] := 1/27*(2*b3[LambdaCutoff]^3 - 9 b3[LambdaCutoff]*c3[LambdaCutoff] + 27*d3[LambdaCutoff]);
+
+zeta[LambdaCutoff_]  := 1/2*(q3[LambdaCutoff] + I*Sqrt[4*p3[LambdaCutoff]^3 - q3[LambdaCutoff]^2]);
+sigma[LambdaCutoff_] := 1/2*(q3[LambdaCutoff] - I*Sqrt[4*p3[LambdaCutoff]^3 - q3[LambdaCutoff]^2]);
+
+mh12[LambdaCutoff_] := mh12 + dmh12/LambdaCutoff^2;
+mh22[LambdaCutoff_] := mh22 + dmh22/LambdaCutoff^2;
+mh32[LambdaCutoff_] := mh32 + dmh32/LambdaCutoff^2;
+
+(*
+mh12[LambdaCutoff_] := 1/3*b3[LambdaCutoff] - 1/2*(zeta[LambdaCutoff]^(1/3) + sigma[LambdaCutoff]^(1/3)) + I*Sqrt[3]/2*(zeta[LambdaCutoff]^(1/3) - sigma[LambdaCutoff]^(1/3));
+mh22[LambdaCutoff_] := 1/3*b3[LambdaCutoff] - 1/2*(zeta[LambdaCutoff]^(1/3) + sigma[LambdaCutoff]^(1/3)) - I*Sqrt[3]/2*(zeta[LambdaCutoff]^(1/3) - sigma[LambdaCutoff]^(1/3));
+mh32[LambdaCutoff_] := 1/3*b3[LambdaCutoff] + zeta[LambdaCutoff]^(1/3) + sigma[LambdaCutoff]^(1/3);
+
+mh12p = Limit[mh12[LambdaCutoff], LambdaCutoff -> \[Infinity]];
+mh22p = Limit[mh22[LambdaCutoff], LambdaCutoff -> \[Infinity]];
+mh32p = Limit[mh32[LambdaCutoff], LambdaCutoff -> \[Infinity]];
+
+dmh12p = (Series[mh12[LambdaCutoff], {LambdaCutoff, \[Infinity], 2}] - Limit[mh12[LambdaCutoff], LambdaCutoff -> \[Infinity]]) // Normal;
+dmh22p = (Series[mh22[LambdaCutoff], {LambdaCutoff, \[Infinity], 2}] - Limit[mh22[LambdaCutoff], LambdaCutoff -> \[Infinity]]) // Normal;
+dmh32p = (Series[mh32[LambdaCutoff], {LambdaCutoff, \[Infinity], 2}] - Limit[mh32[LambdaCutoff], LambdaCutoff -> \[Infinity]]) // Normal;
+
+UpdateParameters[ mh12 -> mh12p, dmh12 -> dmh12p, mh22 -> mh22p, dmh22 -> dmh22p, mh32 -> mh32p, dmh32 -> dmh32p ];
+*)
+
+(* Alignment Limit *)
+
+RuleAlign = {alphah -> beta - Pi/2};
+
+RuleAlignLimit = {};
+
+(* CP-Conserving General 2HDM (real parameters in the scalar sector) *)
+
+RuleCPConserve = {
+                    Im[m12s] -> 0,
+                    Im[l6] -> 0,
+                    Im[l7] -> 0,
+                    
+                    Jc -> 0,
+                    Kc -> 0,
+                    Lc -> 0,
+                    Nc -> 0,
+                    
+                    Im[cphidpar2121] -> 0,
+                    Im[cphidpar2111] -> 0,
+                    Im[cphidpar2122] -> 0,
+                    Im[cphiD2121] -> 0,
+                    Im[cphiD2111] -> 0,
+                    Im[cphiD2122] -> 0,
+                    
+                    Im[cphi111121] -> 0,
+                    Im[cphi222221] -> 0,
+                    Im[cphi112121] -> 0,
+                    Im[cphi222121] -> 0,
+                    Im[cphi212121] -> 0,
+                    Im[cphi212112] -> 0,
+                    Im[cphi112221] -> 0,
+                 
+                    mAH2 -> 0,
+                    mAh2 -> 0
+                    
+ };
+ 
+ RuleCP = {};
+
+(* Common operators and terms containing Higgs doublets in all types of 2HDMs assuming Z2 transformations: Phi1 -> - Phi; Phi2 -> + Phi2 *)
+(* Assuming softly-broken 2HDM *)
+
+Rule2hdmTypeAll = { l6 -> 0,
+                    l7 -> 0,
+    
+                    Cvvphi12[a_,b_] -> 0,
+
+                    cphidpar2111 -> 0,
+                    cphiD2111 -> 0,
+                    cphidpar2122 -> 0,
+                    cphiD2122 -> 0,
+        
+                    cphi111121 -> 0,
+                    cphi222221 -> 0,
+                    cphi212121 -> 0,
+                    cphi212112 -> 0,
+                    cphi112221 -> 0,
+    
+                    cphiG21 -> 0,
+                    cphiGtil21 -> 0,
+                    cphiB21 -> 0,
+                    cphiBtil21 -> 0,
+                    cphiW21 -> 0,
+                    cphiWtil21 -> 0,
+                    cphiWB21 -> 0,
+                    cphiWBtil21 -> 0
+                    };
+
+(* Type-I *)
+
+Rule2hdmTypeIsp = { Ye1[a_,b_] -> 0,
+                    Yd1[a_,b_] -> 0,
+                    Yu1[a_,b_] -> 0,
+                    
+                    Clphi111[a_,b_] -> 0,
+                    Clphi122[a_,b_] -> 0,
+                    Clphi221[a_,b_] -> 0,
+                    Clphi212[a_,b_] -> 0,
+               
+                    Cdphi111[a_,b_] -> 0,
+                    Cdphi122[a_,b_] -> 0,
+                    Cdphi221[a_,b_] -> 0,
+                    Cdphi212[a_,b_] -> 0,
+
+                    Cuphi111[a_,b_] -> 0,
+                    Cuphi122[a_,b_] -> 0,
+                    Cuphi221[a_,b_] -> 0,
+                    Cuphi212[a_,b_] -> 0,
+
+                    ClBphi1[a_,b_] -> 0,
+                    ClWphi1[a_,b_] -> 0,
+    
+                    CdBphi1[a_,b_] -> 0,
+                    CdWphi1[a_,b_] -> 0,
+                    CdGphi1[a_,b_] -> 0,
+            
+                    CuBphi1[a_,b_] -> 0,
+                    CuWphi1[a_,b_] -> 0,
+                    CuGphi1[a_,b_] -> 0,
+        
+                    Cphie12[a_,b_] -> 0,
+                    Cphil121[a_,b_] -> 0,
+            
+                    Cphil123[a_,b_] -> 0,
+                    Cphid12[a_,b_] -> 0,
+                    Cphiu12[a_,b_] -> 0,
+                    Cphiud21[a_,b_] -> 0,
+                    Cphiq121[a_,b_] -> 0,
+                    Cphiq123[a_,b_] -> 0
+                    };
+    
+(* Type-II *)
+
+Rule2hdmTypeIIsp = { Ye2[a_,b_] -> 0,
+                     Yd2[a_,b_] -> 0,
+                     Yu1[a_,b_] -> 0,
+
+                     Clphi121[a_,b_] -> 0,
+                     Clphi112[a_,b_] -> 0,
+                     Clphi211[a_,b_] -> 0,
+                     Clphi222[a_,b_] -> 0,
+
+                     Cdphi121[a_,b_] -> 0,
+                     Cdphi112[a_,b_] -> 0,
+                     Cdphi211[a_,b_] -> 0,
+                     Cdphi222[a_,b_] -> 0,
+
+                     Cuphi111[a_,b_] -> 0,
+                     Cuphi122[a_,b_] -> 0,
+                     Cuphi211[a_,b_] -> 0,
+                     Cuphi222[a_,b_] -> 0,
+               
+                     ClBphi2[a_,b_] -> 0,
+                     ClWphi2[a_,b_] -> 0,
+             
+                     CdBphi2[a_,b_] -> 0,
+                     CdWphi2[a_,b_] -> 0,
+                     CdGphi2[a_,b_] -> 0,
+             
+                     CuBphi1[a_,b_] -> 0,
+                     CuWphi1[a_,b_] -> 0,
+                     CuGphi1[a_,b_] -> 0,
+             
+                     Cphie12[a_,b_] -> 0,
+                     Cphil121[a_,b_] -> 0,
+                     Cphil123[a_,b_] -> 0,
+                     Cphid12[a_,b_] -> 0,
+                     Cphiu12[a_,b_] -> 0,
+                     Cphiud11[a_,b_] -> 0,
+                     Cphiud22[a_,b_] -> 0,
+                     Cphiq121[a_,b_] -> 0,
+                     Cphiq123[a_,b_] -> 0,
+            
+                     Cquqd1[a_,b_,c_,d_] -> 0,
+                     Cquqd8[a_,b_,c_,d_] -> 0,
+                     Clequ1[a_,b_,c_,d_] -> 0,
+                     Clequ3[a_,b_,c_,d_] -> 0
+                     };
+
+(* Type-X *)
+
+Rule2hdmTypeXsp = { Ye2[a_,b_] -> 0,
+                    Yd1[a_,b_] -> 0,
+                    Yu1[a_,b_] -> 0,
+                         
+                    Clphi121[a_,b_] -> 0,
+                    Clphi112[a_,b_] -> 0,
+                    Clphi211[a_,b_] -> 0,
+                    Clphi222[a_,b_] -> 0,
+
+                    Cdphi111[a_,b_] -> 0,
+                    Cdphi122[a_,b_] -> 0,
+                    Cdphi221[a_,b_] -> 0,
+                    Cdphi212[a_,b_] -> 0,
+             
+                    Cuphi111[a_,b_] -> 0,
+                    Cuphi122[a_,b_] -> 0,
+                    Cuphi221[a_,b_] -> 0,
+                    Cuphi212[a_,b_] -> 0,
+
+                    ClBphi2[a_,b_] -> 0,
+                    ClWphi2[a_,b_] -> 0,
+    
+                    CdBphi1[a_,b_] -> 0,
+                    CdWphi1[a_,b_] -> 0,
+                    CdGphi1[a_,b_] -> 0,
+
+                    CuBphi1[a_,b_] -> 0,
+                    CuWphi1[a_,b_] -> 0,
+                    CuGphi1[a_,b_] -> 0,
+        
+                    Cphie12[a_,b_] -> 0,
+                    Cphil121[a_,b_] -> 0,
+                    Cphil123[a_,b_] -> 0,
+                    Cphid12[a_,b_] -> 0,
+                    Cphiu12[a_,b_] -> 0,
+                    Cphiud21[a_,b_] -> 0,
+                    Cphiq121[a_,b_] -> 0,
+                    Cphiq123[a_,b_] -> 0,
+                  
+                    Cledq[a_,b_,c_,d_] -> 0,
+                    Clequ1[a_,b_,c_,d_] -> 0,
+                    Clequ3[a_,b_,c_,d_] -> 0
+                    };
+                         
+(* Type-Y *)
+
+Rule2hdmTypeYsp = { Ye1[a_,b_] -> 0,
+                    Yd2[a_,b_] -> 0,
+                    Yu1[a_,b_] -> 0,
+        
+                    Clphi111[a_,b_] -> 0,
+                    Clphi122[a_,b_] -> 0,
+                    Clphi221[a_,b_] -> 0,
+                    Clphi212[a_,b_] -> 0,
+             
+                    Cdphi121[a_,b_] -> 0,
+                    Cdphi112[a_,b_] -> 0,
+                    Cdphi211[a_,b_] -> 0,
+                    Cdphi222[a_,b_] -> 0,
+                 
+                    Cuphi111[a_,b_] -> 0,
+                    Cuphi122[a_,b_] -> 0,
+                    Cuphi221[a_,b_] -> 0,
+                    Cuphi212[a_,b_] -> 0,
+        
+                    ClBphi1[a_,b_] -> 0,
+                    ClWphi1[a_,b_] -> 0,
+                 
+                    CdBphi2[a_,b_] -> 0,
+                    CdWphi2[a_,b_] -> 0,
+                    CdGphi2[a_,b_] -> 0,
+            
+                    CuWphi1[a_,b_] -> 0,
+                    CuBphi1[a_,b_] -> 0,
+                    CuGphi1[a_,b_] -> 0,
+
+                    Cphie12[a_,b_] -> 0,
+                    Cphil121[a_,b_] -> 0,
+                    Cphil123[a_,b_] -> 0,
+                    Cphid12[a_,b_] -> 0,
+                    Cphiu12[a_,b_] -> 0,
+                    Cphiud11[a_,b_] -> 0,
+                    Cphiud22[a_,b_] -> 0,
+                    Cphiq121[a_,b_] -> 0,
+                    Cphiq123[a_,b_] -> 0,
+        
+                    Cledq[a_,b_,c_,d_] -> 0,
+                    Cquqd1[a_,b_,c_,d_] -> 0,
+                    Cquqd8[a_,b_,c_,d_] -> 0
+                 };
+
+Rule2hdmTypeI =  Join[Rule2hdmTypeAll, Rule2hdmTypeIsp];
+Rule2hdmTypeII = Join[Rule2hdmTypeAll, Rule2hdmTypeIIsp];
+Rule2hdmTypeX =  Join[Rule2hdmTypeAll, Rule2hdmTypeXsp];
+Rule2hdmTypeY =  Join[Rule2hdmTypeAll, Rule2hdmTypeYsp];
+
+
+(*********** Replacement rules for couplings, field redefinitions and diagonalization angles needed for the expansion ***************)
+
+
+Rulegauge = {g1 -> g1 ZB, gw -> gw ZW, gs -> gs ZG};
+
+Rulee = {ee -> ee[LambdaCutoff] };
+
+Ruled4 = {
+
+          mA2 -> mA2[LambdaCutoff],
+          mH2 -> mH2[LambdaCutoff],
+          mh2 -> mh2[LambdaCutoff],
+          
+          mAH2 -> mAH2[LambdaCutoff],
+          mAh2 -> mAh2[LambdaCutoff],
+          
+          mh12 -> mh12[LambdaCutoff],
+          mh22 -> mh22[LambdaCutoff],
+          mh32 -> mh32[LambdaCutoff]
+
+          };
+          
+Ruleferm = {Conjugate[ULv[c_, a_]] ULe[c_, b_] -> Conjugate[Upmns[b, a]],
+            Conjugate[ULe[c_, a_]] ULv[c_, b_] -> Upmns[a, b],
+            Conjugate[ULd[c_, a_]] ULu[c_, b_] -> Conjugate[Vckm[b, a]],
+            Conjugate[ULu[c_, a_]] ULd[c_, b_] -> Vckm[a, b]
+            };
+          
+Ruleyuk =  {Conjugate[ULe[c_, a_]] ye1[c_, d_] URe[d_, b_] -> Ye1[a,b],
+            Conjugate[ULe[c_, a_]] ye2[c_, d_] URe[d_, b_] -> Ye2[a,b],
+            Conjugate[ULd[c_, a_]] yd1[c_, d_] URd[d_, b_] -> Yd1[a,b],
+            Conjugate[ULd[c_, a_]] yd2[c_, d_] URd[d_, b_] -> Yd2[a,b],
+            Conjugate[ULu[c_, a_]] yu1[c_, d_] URu[d_, b_] -> Yu1[a,b],
+            Conjugate[ULu[c_, a_]] yu2[c_, d_] URu[d_, b_] -> Yu2[a,b],
+                        
+            Conjugate[URe[c_, a_]] Conjugate[ye1[d_, c_]] ULe[d_, b_] -> Conjugate[Ye1[b,a]],
+            Conjugate[URe[c_, a_]] Conjugate[ye2[d_, c_]] ULe[d_, b_] -> Conjugate[Ye2[b,a]],
+            Conjugate[URd[c_, a_]] Conjugate[yd1[d_, c_]] ULd[d_, b_] -> Conjugate[Yd1[b,a]],
+            Conjugate[URd[c_, a_]] Conjugate[yd2[d_, c_]] ULd[d_, b_] -> Conjugate[Yd2[b,a]],
+            Conjugate[URu[c_, a_]] Conjugate[yu1[d_, c_]] ULu[d_, b_] -> Conjugate[Yu1[b,a]],
+            Conjugate[URu[c_, a_]] Conjugate[yu2[d_, c_]] ULu[d_, b_] -> Conjugate[Yu2[b,a]],
+                        
+            Conjugate[ULv[c_, a_]] ye1[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Ye1[cc, b]],
+            Conjugate[ULv[c_, a_]] ye2[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Ye2[cc, b]],
+            Conjugate[ULu[c_, a_]] yd1[c_, d_] URd[d_, b_] -> Module[{cc},Vckm[a, cc] Yd1[cc, b]],
+            Conjugate[ULu[c_, a_]] yd2[c_, d_] URd[d_, b_] -> Module[{cc},Vckm[a, cc] Yd2[cc, b]],
+            Conjugate[ULd[c_, a_]] yu1[c_, d_] URu[d_, b_] -> Module[{cc},Conjugate[Vckm[cc, a]] Yu1[cc, b]],
+            Conjugate[ULd[c_, a_]] yu2[c_, d_] URu[d_, b_] -> Module[{cc},Conjugate[Vckm[cc, a]] Yu2[cc, b]],
+                        
+            Conjugate[URe[c_, a_]] Conjugate[ye1[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Ye1[cc, a]] Upmns[cc, b]],
+            Conjugate[URe[c_, a_]] Conjugate[ye2[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Ye2[cc, a]] Upmns[cc, b]],
+            Conjugate[URd[c_, a_]] Conjugate[yd1[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Yd1[cc, a]] Conjugate[Vckm[b, cc]]],
+            Conjugate[URd[c_, a_]] Conjugate[yd2[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Yd2[cc, a]] Conjugate[Vckm[b, cc]]],
+            Conjugate[URu[c_, a_]] Conjugate[yu1[d_, c_]] ULd[d_, b_] -> Module[{cc},Conjugate[Yu1[cc, a]] Vckm[cc, b]],
+            Conjugate[URu[c_, a_]] Conjugate[yu2[d_, c_]] ULd[d_, b_] -> Module[{cc},Conjugate[Yu2[cc, a]] Vckm[cc, b]]
+            };
+
+Rulevv =     {ULv[c_, a_] cvvphi11[c_, d_] ULv[d_, b_] -> Cvvphi11[a,b],
+              ULv[c_, a_] cvvphi22[c_, d_] ULv[d_, b_] -> Cvvphi22[a,b],
+              ULv[c_, a_] cvvphi12[c_, d_] ULv[d_, b_] -> Cvvphi12[a,b],
+
+              ULe[c_, a_] cvvphi11[c_, d_] ULe[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[a, cc]] Cvvphi11[cc, dd] Conjugate[Upmns[b, dd]]],
+              ULe[c_, a_] cvvphi22[c_, d_] ULe[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[a, cc]] Cvvphi22[cc, dd] Conjugate[Upmns[b, dd]]],
+              ULe[c_, a_] cvvphi12[c_, d_] ULe[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[a, cc]] Cvvphi12[cc, dd] Conjugate[Upmns[b, dd]]],
+              
+              ULv[c_, a_] cvvphi11[c_, d_] ULe[d_, b_] -> Module[{cc},Cvvphi11[a, cc] Conjugate[Upmns[b, cc]]],
+              ULv[c_, a_] cvvphi22[c_, d_] ULe[d_, b_] -> Module[{cc},Cvvphi22[a, cc] Conjugate[Upmns[b, cc]]],
+              ULv[c_, a_] cvvphi12[c_, d_] ULe[d_, b_] -> Module[{cc},Cvvphi12[a, cc] Conjugate[Upmns[b, cc]]],
+
+              ULe[c_, a_] cvvphi11[c_, d_] ULv[d_, b_] -> Module[{cc},Conjugate[Upmns[a, cc]] Cvvphi11[cc, b]],
+              ULe[c_, a_] cvvphi22[c_, d_] ULv[d_, b_] -> Module[{cc},Conjugate[Upmns[a, cc]] Cvvphi22[cc, b]],
+              ULe[c_, a_] cvvphi12[c_, d_] ULv[d_, b_] -> Module[{cc},Conjugate[Upmns[a, cc]] Cvvphi12[cc, b]],
+              
+              
+              Conjugate[ULv[c_, a_]] Conjugate[cvvphi11[d_, c_]] Conjugate[ULv[d_, b_]] -> Conjugate[Cvvphi11[b,a]],
+              Conjugate[ULv[c_, a_]] Conjugate[cvvphi22[d_, c_]] Conjugate[ULv[d_, b_]] -> Conjugate[Cvvphi22[b,a]],
+              Conjugate[ULv[c_, a_]] Conjugate[cvvphi12[d_, c_]] Conjugate[ULv[d_, b_]] -> Conjugate[Cvvphi12[b,a]],
+              
+              Conjugate[ULe[c_, a_]] Conjugate[cvvphi11[d_, c_]] Conjugate[ULe[d_, b_]] -> Module[{cc,dd},Upmns[a, cc] Conjugate[Cvvphi11[dd, cc]] Upmns[b, dd]],
+              Conjugate[ULe[c_, a_]] Conjugate[cvvphi22[d_, c_]] Conjugate[ULe[d_, b_]] -> Module[{cc,dd},Upmns[a, cc] Conjugate[Cvvphi22[dd, cc]] Upmns[b, dd]],
+              Conjugate[ULe[c_, a_]] Conjugate[cvvphi12[d_, c_]] Conjugate[ULe[d_, b_]] -> Module[{cc,dd},Upmns[a, cc] Conjugate[Cvvphi12[dd, cc]] Upmns[b, dd]],
+
+              Conjugate[ULe[c_, a_]] Conjugate[cvvphi11[d_, c_]] Conjugate[ULv[d_, b_]] -> Module[{cc},Upmns[a, cc] Conjugate[Cvvphi11[b, cc]]],
+              Conjugate[ULe[c_, a_]] Conjugate[cvvphi22[d_, c_]] Conjugate[ULv[d_, b_]] -> Module[{cc},Upmns[a, cc] Conjugate[Cvvphi22[b, cc]]],
+              Conjugate[ULe[c_, a_]] Conjugate[cvvphi12[d_, c_]] Conjugate[ULv[d_, b_]] -> Module[{cc},Upmns[a, cc] Conjugate[Cvvphi12[b, cc]]],
+
+              Conjugate[ULv[c_, a_]] Conjugate[cvvphi11[d_, c_]] Conjugate[ULe[d_, b_]] -> Module[{cc},Conjugate[Cvvphi11[cc, a]] Upmns[b, cc]],
+              Conjugate[ULv[c_, a_]] Conjugate[cvvphi22[d_, c_]] Conjugate[ULe[d_, b_]] -> Module[{cc},Conjugate[Cvvphi22[cc, a]] Upmns[b, cc]],
+              Conjugate[ULv[c_, a_]] Conjugate[cvvphi12[d_, c_]] Conjugate[ULe[d_, b_]] -> Module[{cc},Conjugate[Cvvphi12[cc, a]] Upmns[b, cc]]
+              };
+            
+
+ (* Symmetric matrix property for vbar v currents and rules for fixing too many indices in computation *)
+ 
+Rulesym1 = {Cvvphi11[Index[Generation,Ext[2]], Index[Generation,Ext[1]]] -> Cvvphi11[Index[Generation,Ext[1]], Index[Generation,Ext[2]]],
+            Cvvphi22[Index[Generation,Ext[2]], Index[Generation,Ext[1]]] -> Cvvphi22[Index[Generation,Ext[1]], Index[Generation,Ext[2]]],
+            Cvvphi12[Index[Generation,Ext[2]], Index[Generation,Ext[1]]] -> Cvvphi12[Index[Generation,Ext[1]], Index[Generation,Ext[2]]],
+
+            Cvvphi11[Index[Generation,Generation$2],Index[Generation,Generation$1]] -> Cvvphi11[Index[Generation,Generation$1], Index[Generation,Generation$2]],
+            Cvvphi22[Index[Generation,Generation$2], Index[Generation,Generation$1]] -> Cvvphi22[Index[Generation,Generation$1], Index[Generation,Generation$2]],
+            Cvvphi12[Index[Generation,Generation$2], Index[Generation,Generation$1]] -> Cvvphi12[Index[Generation,Generation$1], Index[Generation,Generation$2]],
+       
+            Index[Generation, Gluon$1] -> Index[Generation, Generation$1]
+            
+            };
+                    
+Rulesym2a = {
+            Upmns[Index[Generation,Ext[1]],Index[Generation,Generation$2]]->Upmns[Index[Generation,Ext[1]],Index[Generation,Generation$1]],
+            Upmns[Index[Generation,Ext[2]],Index[Generation,Generation$1]]->Upmns[Index[Generation,Ext[2]],Index[Generation,Generation$2]],
+            Cvvphi11[Index[Generation,Ext[2]],Index[Generation,Generation$1]]->Cvvphi11[Index[Generation,Generation$1],Index[Generation,Ext[1]]],
+            Cvvphi22[Index[Generation,Ext[2]],Index[Generation,Generation$1]]->Cvvphi22[Index[Generation,Generation$1],Index[Generation,Ext[1]]],
+            Cvvphi12[Index[Generation,Ext[2]],Index[Generation,Generation$1]]->Cvvphi12[Index[Generation,Generation$1],Index[Generation,Ext[1]]],
+            Cvvphi11[Index[Generation,Generation$1],Index[Generation,Ext[2]]] -> Cvvphi11[Index[Generation,Generation$1],Index[Generation,Ext[1]]],
+            Cvvphi22[Index[Generation,Generation$1],Index[Generation,Ext[2]]] -> Cvvphi22[Index[Generation,Generation$1],Index[Generation,Ext[1]]],
+            Cvvphi12[Index[Generation,Generation$1],Index[Generation,Ext[2]]] -> Cvvphi12[Index[Generation,Generation$1],Index[Generation,Ext[1]]]
+            };
+            
+(* Final switch of indices for charged currents *)
+            
+Rulesym2b = {
+            Conjugate[Cvvphi11[Index[Generation,Generation$1],Index[Generation,Ext[1]]]] -> Conjugate[Cvvphi11[Index[Generation,Generation$1],Index[Generation,Ext[2]]]],
+            Conjugate[Cvvphi22[Index[Generation,Generation$1],Index[Generation,Ext[1]]]] -> Conjugate[Cvvphi22[Index[Generation,Generation$1],Index[Generation,Ext[2]]]],
+            Conjugate[Cvvphi12[Index[Generation,Generation$1],Index[Generation,Ext[1]]]] -> Conjugate[Cvvphi12[Index[Generation,Generation$1],Index[Generation,Ext[2]]]]
+            };
+            
+            
+              
+Rulepsi2phi3 = {Conjugate[ULe[c_, a_]] clphi111[c_, d_] URe[d_, b_] -> Clphi111[a,b],
+               Conjugate[ULe[c_, a_]] clphi122[c_, d_] URe[d_, b_] -> Clphi122[a,b],
+               Conjugate[ULe[c_, a_]] clphi121[c_, d_] URe[d_, b_] -> Clphi121[a,b],
+               Conjugate[ULe[c_, a_]] clphi112[c_, d_] URe[d_, b_] -> Clphi112[a,b],
+               Conjugate[ULe[c_, a_]] clphi211[c_, d_] URe[d_, b_] -> Clphi211[a,b],
+               Conjugate[ULe[c_, a_]] clphi222[c_, d_] URe[d_, b_] -> Clphi222[a,b],
+               Conjugate[ULe[c_, a_]] clphi221[c_, d_] URe[d_, b_] -> Clphi221[a,b],
+               Conjugate[ULe[c_, a_]] clphi212[c_, d_] URe[d_, b_] -> Clphi212[a,b],
+
+               Conjugate[URe[c_, a_]] Conjugate[clphi111[d_, c_]] ULe[d_, b_] -> Conjugate[Clphi111[b,a]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi122[d_, c_]] ULe[d_, b_] -> Conjugate[Clphi122[b,a]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi121[d_, c_]] ULe[d_, b_] -> Conjugate[Clphi121[b,a]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi112[d_, c_]] ULe[d_, b_] -> Conjugate[Clphi112[b,a]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi211[d_, c_]] ULe[d_, b_] -> Conjugate[Clphi211[b,a]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi222[d_, c_]] ULe[d_, b_] -> Conjugate[Clphi222[b,a]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi221[d_, c_]] ULe[d_, b_] -> Conjugate[Clphi221[b,a]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi212[d_, c_]] ULe[d_, b_] -> Conjugate[Clphi212[b,a]],
+ 
+               Conjugate[ULd[c_, a_]] cdphi111[c_, d_] URd[d_, b_] -> Cdphi111[a,b],
+               Conjugate[ULd[c_, a_]] cdphi122[c_, d_] URd[d_, b_] -> Cdphi122[a,b],
+               Conjugate[ULd[c_, a_]] cdphi121[c_, d_] URd[d_, b_] -> Cdphi121[a,b],
+               Conjugate[ULd[c_, a_]] cdphi112[c_, d_] URd[d_, b_] -> Cdphi112[a,b],
+               Conjugate[ULd[c_, a_]] cdphi211[c_, d_] URd[d_, b_] -> Cdphi211[a,b],
+               Conjugate[ULd[c_, a_]] cdphi222[c_, d_] URd[d_, b_] -> Cdphi222[a,b],
+               Conjugate[ULd[c_, a_]] cdphi221[c_, d_] URd[d_, b_] -> Cdphi221[a,b],
+               Conjugate[ULd[c_, a_]] cdphi212[c_, d_] URd[d_, b_] -> Cdphi212[a,b],
+
+               Conjugate[URd[c_, a_]] Conjugate[cdphi111[d_, c_]] ULd[d_, b_] -> Conjugate[Cdphi111[b,a]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi122[d_, c_]] ULd[d_, b_] -> Conjugate[Cdphi122[b,a]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi121[d_, c_]] ULd[d_, b_] -> Conjugate[Cdphi121[b,a]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi112[d_, c_]] ULd[d_, b_] -> Conjugate[Cdphi112[b,a]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi211[d_, c_]] ULd[d_, b_] -> Conjugate[Cdphi211[b,a]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi222[d_, c_]] ULd[d_, b_] -> Conjugate[Cdphi222[b,a]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi221[d_, c_]] ULd[d_, b_] -> Conjugate[Cdphi221[b,a]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi212[d_, c_]] ULd[d_, b_] -> Conjugate[Cdphi212[b,a]],
+
+               Conjugate[ULu[c_, a_]] cuphi111[c_, d_] URu[d_, b_] -> Cuphi111[a,b],
+               Conjugate[ULu[c_, a_]] cuphi122[c_, d_] URu[d_, b_] -> Cuphi122[a,b],
+               Conjugate[ULu[c_, a_]] cuphi121[c_, d_] URu[d_, b_] -> Cuphi121[a,b],
+               Conjugate[ULu[c_, a_]] cuphi112[c_, d_] URu[d_, b_] -> Cuphi112[a,b],
+               Conjugate[ULu[c_, a_]] cuphi211[c_, d_] URu[d_, b_] -> Cuphi211[a,b],
+               Conjugate[ULu[c_, a_]] cuphi222[c_, d_] URu[d_, b_] -> Cuphi222[a,b],
+               Conjugate[ULu[c_, a_]] cuphi221[c_, d_] URu[d_, b_] -> Cuphi221[a,b],
+               Conjugate[ULu[c_, a_]] cuphi212[c_, d_] URu[d_, b_] -> Cuphi212[a,b],
+
+               Conjugate[URu[c_, a_]] Conjugate[cuphi111[d_, c_]] ULu[d_, b_] -> Conjugate[Cuphi111[b,a]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi122[d_, c_]] ULu[d_, b_] -> Conjugate[Cuphi122[b,a]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi121[d_, c_]] ULu[d_, b_] -> Conjugate[Cuphi121[b,a]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi112[d_, c_]] ULu[d_, b_] -> Conjugate[Cuphi112[b,a]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi211[d_, c_]] ULu[d_, b_] -> Conjugate[Cuphi211[b,a]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi222[d_, c_]] ULu[d_, b_] -> Conjugate[Cuphi222[b,a]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi221[d_, c_]] ULu[d_, b_] -> Conjugate[Cuphi221[b,a]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi212[d_, c_]] ULu[d_, b_] -> Conjugate[Cuphi212[b,a]],
+               
+               Conjugate[ULv[c_, a_]] clphi111[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Clphi111[cc, b]],
+               Conjugate[ULv[c_, a_]] clphi122[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Clphi122[cc, b]],
+               Conjugate[ULv[c_, a_]] clphi121[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Clphi121[cc, b]],
+               Conjugate[ULv[c_, a_]] clphi112[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Clphi112[cc, b]],
+               Conjugate[ULv[c_, a_]] clphi211[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Clphi211[cc, b]],
+               Conjugate[ULv[c_, a_]] clphi222[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Clphi222[cc, b]],
+               Conjugate[ULv[c_, a_]] clphi221[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Clphi221[cc, b]],
+               Conjugate[ULv[c_, a_]] clphi212[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Clphi212[cc, b]],
+               
+               Conjugate[URe[c_, a_]] Conjugate[clphi111[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Clphi111[cc, a]] Upmns[cc, b]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi122[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Clphi122[cc, a]] Upmns[cc, b]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi121[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Clphi121[cc, a]] Upmns[cc, b]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi112[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Clphi112[cc, a]] Upmns[cc, b]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi211[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Clphi211[cc, a]] Upmns[cc, b]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi222[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Clphi222[cc, a]] Upmns[cc, b]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi221[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Clphi221[cc, a]] Upmns[cc, b]],
+               Conjugate[URe[c_, a_]] Conjugate[clphi212[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Clphi212[cc, a]] Upmns[cc, b]],
+               
+               Conjugate[ULu[c_, a_]] cdphi111[c_, d_] URd[d_, b_] -> Module[{cc},Vckm[a, cc] Cdphi111[cc, b]],
+               Conjugate[ULu[c_, a_]] cdphi122[c_, d_] URd[d_, b_] -> Module[{cc},Vckm[a, cc] Cdphi122[cc, b]],
+               Conjugate[ULu[c_, a_]] cdphi121[c_, d_] URd[d_, b_] -> Module[{cc},Vckm[a, cc] Cdphi121[cc, b]],
+               Conjugate[ULu[c_, a_]] cdphi112[c_, d_] URd[d_, b_] -> Module[{cc},Vckm[a, cc] Cdphi112[cc, b]],
+               Conjugate[ULu[c_, a_]] cdphi211[c_, d_] URd[d_, b_] -> Module[{cc},Vckm[a, cc] Cdphi211[cc, b]],
+               Conjugate[ULu[c_, a_]] cdphi222[c_, d_] URd[d_, b_] -> Module[{cc},Vckm[a, cc] Cdphi222[cc, b]],
+               Conjugate[ULu[c_, a_]] cdphi221[c_, d_] URd[d_, b_] -> Module[{cc},Vckm[a, cc] Cdphi221[cc, b]],
+               Conjugate[ULu[c_, a_]] cdphi212[c_, d_] URd[d_, b_] -> Module[{cc},Vckm[a, cc] Cdphi212[cc, b]],
+               
+               Conjugate[URd[c_, a_]] Conjugate[cdphi111[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Cdphi111[cc, a]] Conjugate[Vckm[b, cc]]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi122[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Cdphi122[cc, a]] Conjugate[Vckm[b, cc]]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi121[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Cdphi121[cc, a]] Conjugate[Vckm[b, cc]]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi112[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Cdphi112[cc, a]] Conjugate[Vckm[b, cc]]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi211[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Cdphi211[cc, a]] Conjugate[Vckm[b, cc]]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi222[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Cdphi222[cc, a]] Conjugate[Vckm[b, cc]]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi221[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Cdphi221[cc, a]] Conjugate[Vckm[b, cc]]],
+               Conjugate[URd[c_, a_]] Conjugate[cdphi212[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Cdphi212[cc, a]] Conjugate[Vckm[b, cc]]],
+               
+               Conjugate[ULd[c_, a_]] cuphi111[c_, d_] URu[d_, b_] -> Module[{cc},Conjugate[Vckm[cc, a]] Cuphi111[cc, b]],
+               Conjugate[ULd[c_, a_]] cuphi122[c_, d_] URu[d_, b_] -> Module[{cc},Conjugate[Vckm[cc, a]] Cuphi122[cc, b]],
+               Conjugate[ULd[c_, a_]] cuphi121[c_, d_] URu[d_, b_] -> Module[{cc},Conjugate[Vckm[cc, a]] Cuphi121[cc, b]],
+               Conjugate[ULd[c_, a_]] cuphi112[c_, d_] URu[d_, b_] -> Module[{cc},Conjugate[Vckm[cc, a]] Cuphi112[cc, b]],
+               Conjugate[ULd[c_, a_]] cuphi211[c_, d_] URu[d_, b_] -> Module[{cc},Conjugate[Vckm[cc, a]] Cuphi211[cc, b]],
+               Conjugate[ULd[c_, a_]] cuphi222[c_, d_] URu[d_, b_] -> Module[{cc},Conjugate[Vckm[cc, a]] Cuphi222[cc, b]],
+               Conjugate[ULd[c_, a_]] cuphi221[c_, d_] URu[d_, b_] -> Module[{cc},Conjugate[Vckm[cc, a]] Cuphi221[cc, b]],
+               Conjugate[ULd[c_, a_]] cuphi212[c_, d_] URu[d_, b_] -> Module[{cc},Conjugate[Vckm[cc, a]] Cuphi212[cc, b]],
+                
+               Conjugate[URu[c_, a_]] Conjugate[cuphi111[d_, c_]] ULd[d_, b_] -> Module[{cc},Conjugate[Cuphi111[cc, a]] Vckm[cc, b]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi122[d_, c_]] ULd[d_, b_] -> Module[{cc},Conjugate[Cuphi122[cc, a]] Vckm[cc, b]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi121[d_, c_]] ULd[d_, b_] -> Module[{cc},Conjugate[Cuphi121[cc, a]] Vckm[cc, b]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi112[d_, c_]] ULd[d_, b_] -> Module[{cc},Conjugate[Cuphi112[cc, a]] Vckm[cc, b]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi211[d_, c_]] ULd[d_, b_] -> Module[{cc},Conjugate[Cuphi211[cc, a]] Vckm[cc, b]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi222[d_, c_]] ULd[d_, b_] -> Module[{cc},Conjugate[Cuphi222[cc, a]] Vckm[cc, b]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi221[d_, c_]] ULd[d_, b_] -> Module[{cc},Conjugate[Cuphi221[cc, a]] Vckm[cc, b]],
+               Conjugate[URu[c_, a_]] Conjugate[cuphi212[d_, c_]] ULd[d_, b_] -> Module[{cc},Conjugate[Cuphi212[cc, a]] Vckm[cc, b]]
+               };
+                
+Rulepsi2Xphi = {Conjugate[ULe[c_, a_]] clBphi1[c_, d_] URe[d_, b_] -> ClBphi1[a,b],
+             Conjugate[ULe[c_, a_]] clBphi2[c_, d_] URe[d_, b_] -> ClBphi2[a,b],
+             Conjugate[ULe[c_, a_]] clWphi1[c_, d_] URe[d_, b_] -> ClWphi1[a,b],
+             Conjugate[ULe[c_, a_]] clWphi2[c_, d_] URe[d_, b_] -> ClWphi2[a,b],
+             
+             Conjugate[ULd[c_, a_]] cdBphi1[c_, d_] URd[d_, b_] -> CdBphi1[a,b],
+             Conjugate[ULd[c_, a_]] cdBphi2[c_, d_] URd[d_, b_] -> CdBphi2[a,b],
+             Conjugate[ULd[c_, a_]] cdWphi1[c_, d_] URd[d_, b_] -> CdWphi1[a,b],
+             Conjugate[ULd[c_, a_]] cdWphi2[c_, d_] URd[d_, b_] -> CdWphi2[a,b],
+             Conjugate[ULd[c_, a_]] cdGphi1[c_, d_] URd[d_, b_] -> CdGphi1[a,b],
+             Conjugate[ULd[c_, a_]] cdGphi2[c_, d_] URd[d_, b_] -> CdGphi2[a,b],
+
+             Conjugate[ULu[c_, a_]] cuBphi1[c_, d_] URu[d_, b_] -> CuBphi1[a,b],
+             Conjugate[ULu[c_, a_]] cuBphi2[c_, d_] URu[d_, b_] -> CuBphi2[a,b],
+             Conjugate[ULu[c_, a_]] cuWphi1[c_, d_] URu[d_, b_] -> CuWphi1[a,b],
+             Conjugate[ULu[c_, a_]] cuWphi2[c_, d_] URu[d_, b_] -> CuWphi2[a,b],
+             Conjugate[ULu[c_, a_]] cuGphi1[c_, d_] URu[d_, b_] -> CuGphi1[a,b],
+             Conjugate[ULu[c_, a_]] cuGphi2[c_, d_] URu[d_, b_] -> CuGphi2[a,b],
+             
+             Conjugate[URe[c_, a_]] Conjugate[clBphi1[d_, c_]] ULe[d_, b_] -> Conjugate[ClBphi1[b,a]],
+             Conjugate[URe[c_, a_]] Conjugate[clBphi2[d_, c_]] ULe[d_, b_] -> Conjugate[ClBphi2[b,a]],
+             Conjugate[URe[c_, a_]] Conjugate[clWphi1[d_, c_]] ULe[d_, b_] -> Conjugate[ClWphi1[b,a]],
+             Conjugate[URe[c_, a_]] Conjugate[clWphi2[d_, c_]] ULe[d_, b_] -> Conjugate[ClWphi2[b,a]],
+             
+             Conjugate[URd[c_, a_]] Conjugate[cdBphi1[d_, c_]] ULd[d_, b_] -> Conjugate[CdBphi1[b,a]],
+             Conjugate[URd[c_, a_]] Conjugate[cdBphi2[d_, c_]] ULd[d_, b_] -> Conjugate[CdBphi2[b,a]],
+             Conjugate[URd[c_, a_]] Conjugate[cdWphi1[d_, c_]] ULd[d_, b_] -> Conjugate[CdWphi1[b,a]],
+             Conjugate[URd[c_, a_]] Conjugate[cdWphi2[d_, c_]] ULd[d_, b_] -> Conjugate[CdWphi2[b,a]],
+             Conjugate[URd[c_, a_]] Conjugate[cdGphi1[d_, c_]] ULd[d_, b_] -> Conjugate[CdGphi1[b,a]],
+             Conjugate[URd[c_, a_]] Conjugate[cdGphi2[d_, c_]] ULd[d_, b_] -> Conjugate[CdGphi2[b,a]],
+           
+             Conjugate[URu[c_, a_]] Conjugate[cuBphi1[d_, c_]] ULu[d_, b_] -> Conjugate[CuBphi1[b,a]],
+             Conjugate[URu[c_, a_]] Conjugate[cuBphi2[d_, c_]] ULu[d_, b_] -> Conjugate[CuBphi2[b,a]],
+             Conjugate[URu[c_, a_]] Conjugate[cuWphi1[d_, c_]] ULu[d_, b_] -> Conjugate[CuWphi1[b,a]],
+             Conjugate[URu[c_, a_]] Conjugate[cuWphi2[d_, c_]] ULu[d_, b_] -> Conjugate[CuWphi2[b,a]],
+             Conjugate[URu[c_, a_]] Conjugate[cuGphi1[d_, c_]] ULu[d_, b_] -> Conjugate[CuGphi1[b,a]],
+             Conjugate[URu[c_, a_]] Conjugate[cuGphi2[d_, c_]] ULu[d_, b_] -> Conjugate[CuGphi2[b,a]],
+        
+             Conjugate[ULv[c_, a_]] clBphi1[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] ClBphi1[cc, b]],
+             Conjugate[ULv[c_, a_]] clBphi2[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] ClBphi2[cc, b]],
+             Conjugate[ULv[c_, a_]] clWphi1[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] ClWphi1[cc, b]],
+             Conjugate[ULv[c_, a_]] clWphi2[c_, d_] URe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] ClWphi2[cc, b]],
+               
+             Conjugate[URe[c_, a_]] Conjugate[clBphi1[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[ClBphi1[cc, a]] Upmns[cc, b]],
+             Conjugate[URe[c_, a_]] Conjugate[clBphi2[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[ClBphi2[cc, a]] Upmns[cc, b]],
+             Conjugate[URe[c_, a_]] Conjugate[clWphi1[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[ClWphi1[cc, a]] Upmns[cc, b]],
+             Conjugate[URe[c_, a_]] Conjugate[clWphi2[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[ClWphi2[cc, a]] Upmns[cc, b]],
+               
+             Conjugate[ULu[c_, a_]] cdBphi1[c_, d_] URd[d_, b_] -> Module[{dd},Vckm[a, dd] CdBphi1[dd, b]],
+             Conjugate[ULu[c_, a_]] cdBphi2[c_, d_] URd[d_, b_] -> Module[{dd},Vckm[a, dd] CdBphi2[dd, b]],
+             Conjugate[ULu[c_, a_]] cdWphi1[c_, d_] URd[d_, b_] -> Module[{dd},Vckm[a, dd] CdWphi1[dd, b]],
+             Conjugate[ULu[c_, a_]] cdWphi2[c_, d_] URd[d_, b_] -> Module[{dd},Vckm[a, dd] CdWphi2[dd, b]],
+             Conjugate[ULu[c_, a_]] cdGphi1[c_, d_] URd[d_, b_] -> Module[{dd},Vckm[a, dd] CdGphi1[dd, b]],
+             Conjugate[ULu[c_, a_]] cdGphi2[c_, d_] URd[d_, b_] -> Module[{dd},Vckm[a, dd] CdGphi2[dd, b]],
+             
+             Conjugate[URd[c_, a_]] Conjugate[cdBphi1[d_, c_]] ULu[d_, b_] -> Module[{dd},Conjugate[CdBphi1[dd, a]] Conjugate[Vckm[b, dd]]],
+             Conjugate[URd[c_, a_]] Conjugate[cdBphi2[d_, c_]] ULu[d_, b_] -> Module[{dd},Conjugate[CdBphi2[dd, a]] Conjugate[Vckm[b, dd]]],
+             Conjugate[URd[c_, a_]] Conjugate[cdWphi1[d_, c_]] ULu[d_, b_] -> Module[{dd},Conjugate[CdWphi1[dd, a]] Conjugate[Vckm[b, dd]]],
+             Conjugate[URd[c_, a_]] Conjugate[cdWphi2[d_, c_]] ULu[d_, b_] -> Module[{dd},Conjugate[CdWphi2[dd, a]] Conjugate[Vckm[b, dd]]],
+             Conjugate[URd[c_, a_]] Conjugate[cdGphi1[d_, c_]] ULu[d_, b_] -> Module[{dd},Conjugate[CdGphi1[dd, a]] Conjugate[Vckm[b, dd]]],
+             Conjugate[URd[c_, a_]] Conjugate[cdGphi2[d_, c_]] ULu[d_, b_] -> Module[{dd},Conjugate[CdGphi2[dd, a]] Conjugate[Vckm[b, dd]]],
+               
+             Conjugate[ULd[c_, a_]] cuBphi1[c_, d_] URu[d_, b_] -> Module[{dd},Conjugate[Vckm[dd, a]] CuBphi1[dd, b]],
+             Conjugate[ULd[c_, a_]] cuBphi2[c_, d_] URu[d_, b_] -> Module[{dd},Conjugate[Vckm[dd, a]] CuBphi2[dd, b]],
+             Conjugate[ULd[c_, a_]] cuWphi1[c_, d_] URu[d_, b_] -> Module[{dd},Conjugate[Vckm[dd, a]] CuWphi1[dd, b]],
+             Conjugate[ULd[c_, a_]] cuWphi2[c_, d_] URu[d_, b_] -> Module[{dd},Conjugate[Vckm[dd, a]] CuWphi2[dd, b]],
+             Conjugate[ULd[c_, a_]] cuGphi1[c_, d_] URu[d_, b_] -> Module[{dd},Conjugate[Vckm[dd, a]] CuGphi1[dd, b]],
+             Conjugate[ULd[c_, a_]] cuGphi2[c_, d_] URu[d_, b_] -> Module[{dd},Conjugate[Vckm[dd, a]] CuGphi2[dd, b]],
+               
+             Conjugate[URu[c_, a_]] Conjugate[cuBphi1[d_, c_]] ULd[d_, b_] -> Module[{dd},Conjugate[CuBphi1[dd, a]] Vckm[dd, b]],
+             Conjugate[URu[c_, a_]] Conjugate[cuBphi2[d_, c_]] ULd[d_, b_] -> Module[{dd},Conjugate[CuBphi2[dd, a]] Vckm[dd, b]],
+             Conjugate[URu[c_, a_]] Conjugate[cuWphi1[d_, c_]] ULd[d_, b_] -> Module[{dd},Conjugate[CuWphi1[dd, a]] Vckm[dd, b]],
+             Conjugate[URu[c_, a_]] Conjugate[cuWphi2[d_, c_]] ULd[d_, b_] -> Module[{dd},Conjugate[CuWphi2[dd, a]] Vckm[dd, b]],
+             Conjugate[URu[c_, a_]] Conjugate[cuGphi1[d_, c_]] ULd[d_, b_] -> Module[{dd},Conjugate[CuGphi1[dd, a]] Vckm[dd, b]],
+             Conjugate[URu[c_, a_]] Conjugate[cuGphi2[d_, c_]] ULd[d_, b_] -> Module[{dd},Conjugate[CuGphi2[dd, a]] Vckm[dd, b]]
+             };
+                
+Rulepsi2phi2D = {Conjugate[URe[c_, a_]] cphie11[c_, d_] URe[d_, b_] -> Cphie11[a,b],
+             Conjugate[URe[c_, a_]] cphie22[c_, d_] URe[d_, b_] -> Cphie22[a,b],
+             Conjugate[URe[c_, a_]] cphie12[c_, d_] URe[d_, b_] -> Cphie12[a,b],
+ 
+             Conjugate[URd[c_, a_]] cphid11[c_, d_] URd[d_, b_] -> Cphid11[a,b],
+             Conjugate[URd[c_, a_]] cphid22[c_, d_] URd[d_, b_] -> Cphid22[a,b],
+             Conjugate[URd[c_, a_]] cphid12[c_, d_] URd[d_, b_] -> Cphid12[a,b],
+
+             Conjugate[URu[c_, a_]] cphiu11[c_, d_] URu[d_, b_] -> Cphiu11[a,b],
+             Conjugate[URu[c_, a_]] cphiu22[c_, d_] URu[d_, b_] -> Cphiu22[a,b],
+             Conjugate[URu[c_, a_]] cphiu12[c_, d_] URu[d_, b_] -> Cphiu12[a,b],
+            
+             Conjugate[URu[c_, a_]] cphiud11[c_, d_] URd[d_, b_] -> Cphiud11[a,b],
+             Conjugate[URu[c_, a_]] cphiud22[c_, d_] URd[d_, b_] -> Cphiud22[a,b],
+             Conjugate[URu[c_, a_]] cphiud21[c_, d_] URd[d_, b_] -> Cphiud21[a,b],
+            
+             Conjugate[ULe[c_, a_]] cphil111[c_, d_] ULe[d_, b_] -> Cphil111[a,b],
+             Conjugate[ULe[c_, a_]] cphil221[c_, d_] ULe[d_, b_] -> Cphil221[a,b],
+             Conjugate[ULe[c_, a_]] cphil121[c_, d_] ULe[d_, b_] -> Cphil121[a,b],
+             Conjugate[ULe[c_, a_]] cphil113[c_, d_] ULe[d_, b_] -> Cphil113[a,b],
+             Conjugate[ULe[c_, a_]] cphil223[c_, d_] ULe[d_, b_] -> Cphil223[a,b],
+             Conjugate[ULe[c_, a_]] cphil123[c_, d_] ULe[d_, b_] -> Cphil123[a,b],
+
+             Conjugate[ULd[c_, a_]] cphiq111[c_, d_] ULd[d_, b_] -> Cphiq111[a,b],
+             Conjugate[ULd[c_, a_]] cphiq221[c_, d_] ULd[d_, b_] -> Cphiq221[a,b],
+             Conjugate[ULd[c_, a_]] cphiq121[c_, d_] ULd[d_, b_] -> Cphiq121[a,b],
+             Conjugate[ULd[c_, a_]] cphiq113[c_, d_] ULd[d_, b_] -> Cphiq113[a,b],
+             Conjugate[ULd[c_, a_]] cphiq223[c_, d_] ULd[d_, b_] -> Cphiq223[a,b],
+             Conjugate[ULd[c_, a_]] cphiq123[c_, d_] ULd[d_, b_] -> Cphiq123[a,b],
+            
+             Conjugate[URe[c_, a_]] Conjugate[cphie11[d_, c_]] URe[d_, b_] -> Conjugate[Cphie11[b,a]],
+             Conjugate[URe[c_, a_]] Conjugate[cphie22[d_, c_]] URe[d_, b_] -> Conjugate[Cphie22[b,a]],
+             Conjugate[URe[c_, a_]] Conjugate[cphie12[d_, c_]] URe[d_, b_] -> Conjugate[Cphie12[b,a]],
+
+             Conjugate[URd[c_, a_]] Conjugate[cphid11[d_, c_]] URd[d_, b_] -> Conjugate[Cphid11[b,a]],
+             Conjugate[URd[c_, a_]] Conjugate[cphid22[d_, c_]] URd[d_, b_] -> Conjugate[Cphid22[b,a]],
+             Conjugate[URd[c_, a_]] Conjugate[cphid12[d_, c_]] URd[d_, b_] -> Conjugate[Cphid12[b,a]],
+
+             Conjugate[URu[c_, a_]] Conjugate[cphiu11[d_, c_]] URu[d_, b_] -> Conjugate[Cphiu11[b,a]],
+             Conjugate[URu[c_, a_]] Conjugate[cphiu22[d_, c_]] URu[d_, b_] -> Conjugate[Cphiu22[b,a]],
+             Conjugate[URu[c_, a_]] Conjugate[cphiu12[d_, c_]] URu[d_, b_] -> Conjugate[Cphiu12[b,a]],
+
+             Conjugate[URd[c_, a_]] Conjugate[cphiud11[d_, c_]] URu[d_, b_] -> Conjugate[Cphiud11[b,a]],
+             Conjugate[URd[c_, a_]] Conjugate[cphiud22[d_, c_]] URu[d_, b_] -> Conjugate[Cphiud22[b,a]],
+             Conjugate[URd[c_, a_]] Conjugate[cphiud21[d_, c_]] URu[d_, b_] -> Conjugate[Cphiud21[b,a]],
+            
+             Conjugate[ULe[c_, a_]] Conjugate[cphil111[d_, c_]] ULe[d_, b_] -> Conjugate[Cphil111[b,a]],
+             Conjugate[ULe[c_, a_]] Conjugate[cphil221[d_, c_]] ULe[d_, b_] -> Conjugate[Cphil221[b,a]],
+             Conjugate[ULe[c_, a_]] Conjugate[cphil121[d_, c_]] ULe[d_, b_] -> Conjugate[Cphil121[b,a]],
+             Conjugate[ULe[c_, a_]] Conjugate[cphil113[d_, c_]] ULe[d_, b_] -> Conjugate[Cphil113[b,a]],
+             Conjugate[ULe[c_, a_]] Conjugate[cphil223[d_, c_]] ULe[d_, b_] -> Conjugate[Cphil223[b,a]],
+             Conjugate[ULe[c_, a_]] Conjugate[cphil123[d_, c_]] ULe[d_, b_] -> Conjugate[Cphil123[b,a]],
+
+             Conjugate[ULd[c_, a_]] Conjugate[cphiq111[d_, c_]] ULd[d_, b_] -> Conjugate[Cphiq111[b,a]],
+             Conjugate[ULd[c_, a_]] Conjugate[cphiq221[d_, c_]] ULd[d_, b_] -> Conjugate[Cphiq221[b,a]],
+             Conjugate[ULd[c_, a_]] Conjugate[cphiq121[d_, c_]] ULd[d_, b_] -> Conjugate[Cphiq121[b,a]],
+             Conjugate[ULd[c_, a_]] Conjugate[cphiq113[d_, c_]] ULd[d_, b_] -> Conjugate[Cphiq113[b,a]],
+             Conjugate[ULd[c_, a_]] Conjugate[cphiq223[d_, c_]] ULd[d_, b_] -> Conjugate[Cphiq223[b,a]],
+             Conjugate[ULd[c_, a_]] Conjugate[cphiq123[d_, c_]] ULd[d_, b_] -> Conjugate[Cphiq123[b,a]],
+             
+             Conjugate[ULv[c_, a_]] cphil111[c_, d_] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Cphil111[cc, dd] Upmns[dd, b]],
+             Conjugate[ULv[c_, a_]] cphil221[c_, d_] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Cphil221[cc, dd] Upmns[dd, b]],
+             Conjugate[ULv[c_, a_]] cphil121[c_, d_] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Cphil121[cc, dd] Upmns[dd, b]],
+             Conjugate[ULv[c_, a_]] cphil113[c_, d_] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Cphil113[cc, dd] Upmns[dd, b]],
+             Conjugate[ULv[c_, a_]] cphil223[c_, d_] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Cphil223[cc, dd] Upmns[dd, b]],
+             Conjugate[ULv[c_, a_]] cphil123[c_, d_] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Cphil123[cc, dd] Upmns[dd, b]],
+             
+             Conjugate[ULv[c_, a_]] cphil113[c_, d_] ULe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Cphil113[cc, b]],
+             Conjugate[ULv[c_, a_]] cphil223[c_, d_] ULe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Cphil223[cc, b]],
+             Conjugate[ULv[c_, a_]] cphil123[c_, d_] ULe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Cphil123[cc, b]],
+             
+             Conjugate[ULe[c_, a_]] cphil113[c_, d_] ULv[d_, b_] -> Module[{cc},Cphil113[a, cc] Upmns[cc, b]],
+             Conjugate[ULe[c_, a_]] cphil223[c_, d_] ULv[d_, b_] -> Module[{cc},Cphil223[a, cc] Upmns[cc, b]],
+             Conjugate[ULe[c_, a_]] cphil123[c_, d_] ULv[d_, b_] -> Module[{cc},Cphil123[a, cc] Upmns[cc, b]],
+             
+             Conjugate[ULv[c_, a_]] Conjugate[cphil111[d_, c_]] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Conjugate[Cphil111[dd, cc]] Upmns[dd, b]],
+             Conjugate[ULv[c_, a_]] Conjugate[cphil221[d_, c_]] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Conjugate[Cphil221[dd, cc]] Upmns[dd, b]],
+             Conjugate[ULv[c_, a_]] Conjugate[cphil121[d_, c_]] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Conjugate[Cphil121[dd, cc]] Upmns[dd, b]],
+             Conjugate[ULv[c_, a_]] Conjugate[cphil113[d_, c_]] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Conjugate[Cphil113[dd, cc]] Upmns[dd, b]],
+             Conjugate[ULv[c_, a_]] Conjugate[cphil223[d_, c_]] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Conjugate[Cphil223[dd, cc]] Upmns[dd, b]],
+             Conjugate[ULv[c_, a_]] Conjugate[cphil123[d_, c_]] ULv[d_, b_] -> Module[{cc,dd},Conjugate[Upmns[cc, a]] Conjugate[Cphil123[dd, cc]] Upmns[dd, b]],
+             
+             Conjugate[ULe[c_, a_]] Conjugate[cphil113[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Cphil113[cc, a]] Upmns[cc, b]],
+             Conjugate[ULe[c_, a_]] Conjugate[cphil223[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Cphil223[cc, a]] Upmns[cc, b]],
+             Conjugate[ULe[c_, a_]] Conjugate[cphil123[d_, c_]] ULv[d_, b_] -> Module[{cc},Conjugate[Cphil123[cc, a]] Upmns[cc, b]],
+
+             Conjugate[ULv[c_, a_]] Conjugate[cphil113[d_, c_]] ULe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Conjugate[Cphil113[b, cc]]],
+             Conjugate[ULv[c_, a_]] Conjugate[cphil223[d_, c_]] ULe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Conjugate[Cphil223[b, cc]]],
+             Conjugate[ULv[c_, a_]] Conjugate[cphil123[d_, c_]] ULe[d_, b_] -> Module[{cc},Conjugate[Upmns[cc, a]] Conjugate[Cphil123[b, cc]]],
+             
+             Conjugate[ULu[c_, a_]] cphiq111[c_, d_] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Cphiq111[cc, dd] Conjugate[Vckm[b, dd]]],
+             Conjugate[ULu[c_, a_]] cphiq221[c_, d_] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Cphiq221[cc, dd] Conjugate[Vckm[b, dd]]],
+             Conjugate[ULu[c_, a_]] cphiq121[c_, d_] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Cphiq121[cc, dd] Conjugate[Vckm[b, dd]]],
+             Conjugate[ULu[c_, a_]] cphiq113[c_, d_] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Cphiq113[cc, dd] Conjugate[Vckm[b, dd]]],
+             Conjugate[ULu[c_, a_]] cphiq223[c_, d_] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Cphiq223[cc, dd] Conjugate[Vckm[b, dd]]],
+             Conjugate[ULu[c_, a_]] cphiq123[c_, d_] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Cphiq123[cc, dd] Conjugate[Vckm[b, dd]]],
+             
+             Conjugate[ULu[c_, a_]] cphiq113[c_, d_] ULd[d_, b_] -> Module[{cc},Vckm[a, cc] Cphiq113[cc, b]],
+             Conjugate[ULu[c_, a_]] cphiq223[c_, d_] ULd[d_, b_] -> Module[{cc},Vckm[a, cc] Cphiq223[cc, b]],
+             Conjugate[ULu[c_, a_]] cphiq123[c_, d_] ULd[d_, b_] -> Module[{cc},Vckm[a, cc] Cphiq123[cc, b]],
+             
+             Conjugate[ULd[c_, a_]] cphiq113[c_, d_] ULu[d_, b_] -> Module[{cc},Cphiq113[a, cc] Conjugate[Vckm[b, cc]]],
+             Conjugate[ULd[c_, a_]] cphiq223[c_, d_] ULu[d_, b_] -> Module[{cc},Cphiq223[a, cc] Conjugate[Vckm[b, cc]]],
+             Conjugate[ULd[c_, a_]] cphiq123[c_, d_] ULu[d_, b_] -> Module[{cc},Cphiq123[a, cc] Conjugate[Vckm[b, cc]]],
+             
+             Conjugate[ULu[c_, a_]] Conjugate[cphiq111[d_, c_]] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Conjugate[Cphiq111[dd, cc]] Conjugate[Vckm[b, dd]]],
+             Conjugate[ULu[c_, a_]] Conjugate[cphiq221[d_, c_]] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Conjugate[Cphiq221[dd, cc]] Conjugate[Vckm[b, dd]]],
+             Conjugate[ULu[c_, a_]] Conjugate[cphiq121[d_, c_]] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Conjugate[Cphiq121[dd, cc]] Conjugate[Vckm[b, dd]]],
+             Conjugate[ULu[c_, a_]] Conjugate[cphiq113[d_, c_]] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Conjugate[Cphiq113[dd, cc]] Conjugate[Vckm[b, dd]]],
+             Conjugate[ULu[c_, a_]] Conjugate[cphiq223[d_, c_]] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Conjugate[Cphiq223[dd, cc]] Conjugate[Vckm[b, dd]]],
+             Conjugate[ULu[c_, a_]] Conjugate[cphiq123[d_, c_]] ULu[d_, b_] -> Module[{cc,dd},Vckm[a, cc] Conjugate[Cphiq123[dd, cc]] Conjugate[Vckm[b, dd]]],
+             
+             Conjugate[ULd[c_, a_]] Conjugate[cphiq113[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Cphiq113[cc, a]] Conjugate[Vckm[b, cc]]],
+             Conjugate[ULd[c_, a_]] Conjugate[cphiq223[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Cphiq223[cc, a]] Conjugate[Vckm[b, cc]]],
+             Conjugate[ULd[c_, a_]] Conjugate[cphiq123[d_, c_]] ULu[d_, b_] -> Module[{cc},Conjugate[Cphiq123[cc, a]] Conjugate[Vckm[b, cc]]],
+
+             Conjugate[ULu[c_, a_]] Conjugate[cphiq113[d_, c_]] ULd[d_, b_] -> Module[{cc},Vckm[a, cc] Conjugate[Cphiq113[b, cc]]],
+             Conjugate[ULu[c_, a_]] Conjugate[cphiq223[d_, c_]] ULd[d_, b_] -> Module[{cc},Vckm[a, cc] Conjugate[Cphiq223[b, cc]]],
+             Conjugate[ULu[c_, a_]] Conjugate[cphiq123[d_, c_]] ULd[d_, b_] -> Module[{cc},Vckm[a, cc] Conjugate[Cphiq123[b, cc]]]
+             };
+
+
+RuleMe = {
+
+(* Majorana neutrino mass replacement *)
+
+Cvvphi11[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2 *Cvvphi22[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] - Tan[beta] * Cvvphi12[Index[Generation, Ext[1]], Index[Generation, Ext[2]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2*Conjugate[Cvvphi22[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]] - Tan[beta] * Conjugate[Cvvphi12[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]],
+  
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[2]]] -> -mvm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[2]]] - Tan[beta] * Cvvphi12[Index[Generation, Generation$1], Index[Generation, Ext[2]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[2]]]] -> -mvm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[2]]]] - Tan[beta] * Conjugate[Cvvphi12[Index[Generation, Generation$1], Index[Generation, Ext[2]]]],
+  
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[1]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[1]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[1]]] - Tan[beta] * Cvvphi12[Index[Generation, Generation$1], Index[Generation, Ext[1]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[1]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] - Tan[beta] * Conjugate[Cvvphi12[Index[Generation, Generation$1], Index[Generation, Ext[1]]]],
+
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Generation$2]] -> -mvm[Index[Generation, Generation$1]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Generation$2]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Generation$2]] - Tan[beta] * Cvvphi12[Index[Generation, Generation$1], Index[Generation, Generation$2]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Generation$2]]] -> -mvm[Index[Generation, Generation$1]]*IndexDelta[Index[Generation, Generation$1], Index[Generation, Generation$2]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Generation$2]]] - Tan[beta] * Conjugate[Cvvphi12[Index[Generation, Generation$1], Index[Generation, Generation$2]]],
+
+(* Lepton/quark mass replacement *)
+
+Ye1[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+mem[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev*Cos[beta])
+- Tan[beta]*Ye2[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]
+  + vev^2*Cos[beta]^2*Cephi111[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cephi122[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cephi112[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cephi121[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cephi211[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Cephi222[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cephi212[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cephi221[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2,
+
+Conjugate[Ye1[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+mem[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev*Cos[beta])
+- Tan[beta]*Conjugate[Ye2[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]
+  + vev^2*Cos[beta]^2*Conjugate[Cephi111[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cephi122[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cephi112[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cephi121[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cephi211[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Conjugate[Cephi222[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cephi212[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cephi221[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2,
+
+Ye1[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ mem[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev*Cos[beta])
+  - Tan[beta]*Ye2[Index[Generation, Generation$1], Index[Generation, Ext[2]]]
+  + vev^2*Cos[beta]^2*Cephi111[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cephi122[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cephi112[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cephi121[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cephi211[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Cephi222[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cephi212[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cephi221[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2,
+
+Conjugate[Ye1[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ mem[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev*Cos[beta])
+ - Tan[beta]*Conjugate[Ye2[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]
+  + vev^2*Cos[beta]^2*Conjugate[Cephi111[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cephi122[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cephi112[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cephi121[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cephi211[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Conjugate[Cephi222[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cephi212[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cephi221[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2,
+  
+Yd1[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+mdm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev*Cos[beta])
+- Tan[beta]*Yd2[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]
+  + vev^2*Cos[beta]^2*Cdphi111[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cdphi122[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cdphi112[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cdphi121[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cdphi211[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Cdphi222[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cdphi212[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cdphi221[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2,
+
+Conjugate[Yd1[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+mdm[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev*Cos[beta])
+- Tan[beta]*Conjugate[Yd2[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]
+  + vev^2*Cos[beta]^2*Conjugate[Cdphi111[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cdphi122[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cdphi112[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cdphi121[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cdphi211[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Conjugate[Cdphi222[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cdphi212[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cdphi221[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2,
+
+Yd1[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ mdm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev*Cos[beta])
+  - Tan[beta]*Yd2[Index[Generation, Generation$1], Index[Generation, Ext[2]]]
+  + vev^2*Cos[beta]^2*Cdphi111[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cdphi122[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cdphi112[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cdphi121[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cdphi211[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Cdphi222[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cdphi212[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cdphi221[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2,
+
+Conjugate[Yd1[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ mdm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev*Cos[beta])
+ - Tan[beta]*Conjugate[Yd2[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]
+  + vev^2*Cos[beta]^2*Conjugate[Cdphi111[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cdphi122[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cdphi112[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cdphi121[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cdphi211[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Conjugate[Cdphi222[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cdphi212[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cdphi221[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2,
+  
+Yu1[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+mum[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev*Cos[beta])
+- Tan[beta]*Yu2[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]
+  + vev^2*Cos[beta]^2*Cuphi111[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cuphi122[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cuphi112[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cuphi121[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cuphi211[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Cuphi222[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cuphi212[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cuphi221[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2,
+
+Conjugate[Yu1[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+mum[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev*Cos[beta])
+- Tan[beta]*Conjugate[Yu2[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]
+  + vev^2*Cos[beta]^2*Conjugate[Cuphi111[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cuphi122[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cuphi112[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cuphi121[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cuphi211[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Conjugate[Cuphi222[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cuphi212[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cuphi221[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2,
+
+Yu1[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ mum[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev*Cos[beta])
+  - Tan[beta]*Yu2[Index[Generation, Generation$1], Index[Generation, Ext[2]]]
+  + vev^2*Cos[beta]^2*Cuphi111[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cuphi122[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cuphi112[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cuphi121[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Cuphi211[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Cuphi222[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cuphi212[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Cuphi221[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2,
+
+Conjugate[Yu1[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ mum[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev*Cos[beta])
+ - Tan[beta]*Conjugate[Yu2[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]
+  + vev^2*Cos[beta]^2*Conjugate[Cuphi111[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cuphi122[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cuphi112[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cuphi121[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]*Conjugate[Cuphi211[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Tan[beta]*Conjugate[Cuphi222[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cuphi212[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^2*Conjugate[Cuphi221[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+
+};
+
+
+RuleMeI = {
+
+(* Majorana neutrino mass replacement *)
+
+Cvvphi11[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2 *Cvvphi22[Index[Generation, Ext[1]], Index[Generation, Ext[2]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2*Conjugate[Cvvphi22[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]],
+  
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[2]]] -> -mvm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[2]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[2]]]] -> -mvm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[2]]]],
+  
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[1]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[1]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[1]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[1]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[1]]]],
+
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Generation$2]] -> -mvm[Index[Generation, Generation$1]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Generation$2]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Generation$2]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Generation$2]]] -> -mvm[Index[Generation, Generation$1]]*IndexDelta[Index[Generation, Generation$1], Index[Generation, Generation$2]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Generation$2]]],
+
+(* Lepton/quark mass replacement *)
+
+Ye2[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mem[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi112[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi121[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi211[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Clphi222[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Ye2[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mem[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi112[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi121[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi211[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Clphi222[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+
+Ye2[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mem[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi112[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi121[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi211[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Clphi222[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Ye2[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mem[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi112[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi121[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi211[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Clphi222[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+  
+Yd2[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mdm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi112[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi121[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi211[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cdphi222[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yd2[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mdm[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi112[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi121[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi211[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cdphi222[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+
+Yd2[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mdm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi112[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi121[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi211[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cdphi222[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yd2[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mdm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi112[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi121[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi211[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cdphi222[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+  
+Yu2[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mum[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi112[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi121[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi211[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cuphi222[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yu2[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mum[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi112[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi121[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi211[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cuphi222[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+
+Yu2[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mum[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi112[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi121[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi211[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cuphi222[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yu2[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mum[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi112[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi121[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi211[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cuphi222[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta]
+
+};
+
+RuleMeII = {
+
+(* Majorana neutrino mass replacement *)
+
+Cvvphi11[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2 *Cvvphi22[Index[Generation, Ext[1]], Index[Generation, Ext[2]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2*Conjugate[Cvvphi22[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]],
+  
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[2]]] -> -mvm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[2]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[2]]]] -> -mvm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[2]]]],
+  
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[1]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[1]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[1]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[1]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[1]]]],
+
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Generation$2]] -> -mvm[Index[Generation, Generation$1]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Generation$2]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Generation$2]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Generation$2]]] -> -mvm[Index[Generation, Generation$1]]*IndexDelta[Index[Generation, Generation$1], Index[Generation, Generation$2]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Generation$2]]],
+
+(* Lepton/quark mass replacement *)
+
+Ye1[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mem[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Clphi111[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi122[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi212[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi221[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Cos[beta],
+
+Conjugate[Ye1[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mem[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Conjugate[Clphi111[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi122[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi212[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi221[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Cos[beta],
+
+Ye1[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mem[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Clphi111[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi122[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi212[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi221[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Cos[beta],
+
+Conjugate[Ye1[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mem[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Cos[beta]^3*Conjugate[Clphi111[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi122[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi212[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi221[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Cos[beta],
+ 
+Yd1[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mdm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Cdphi111[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi122[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi212[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi221[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Cos[beta],
+
+Conjugate[Yd1[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mdm[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Conjugate[Cdphi111[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi122[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi212[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi221[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Cos[beta],
+
+Yd1[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mdm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Cdphi111[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi122[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi212[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi221[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Cos[beta],
+
+Conjugate[Yd1[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mdm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Cos[beta]^3*Conjugate[Cdphi111[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi122[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi212[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi221[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Cos[beta],
+
+Yu2[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mum[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi112[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi121[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi211[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cuphi222[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yu2[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mum[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi112[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi121[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi211[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cuphi222[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+
+Yu2[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mum[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi112[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi121[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi211[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cuphi222[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yu2[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mum[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi112[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi121[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi211[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cuphi222[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta]
+
+};
+
+RuleMeX = {
+
+(* Majorana neutrino mass replacement *)
+
+Cvvphi11[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2 *Cvvphi22[Index[Generation, Ext[1]], Index[Generation, Ext[2]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2*Conjugate[Cvvphi22[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]],
+  
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[2]]] -> -mvm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[2]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[2]]]] -> -mvm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[2]]]],
+  
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[1]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[1]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[1]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[1]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[1]]]],
+
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Generation$2]] -> -mvm[Index[Generation, Generation$1]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Generation$2]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Generation$2]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Generation$2]]] -> -mvm[Index[Generation, Generation$1]]*IndexDelta[Index[Generation, Generation$1], Index[Generation, Generation$2]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Generation$2]]],
+
+(* Lepton/quark mass replacement *)
+
+Ye1[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mem[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Clphi111[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi122[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi212[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi221[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Cos[beta],
+
+Conjugate[Ye1[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mem[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Conjugate[Clphi111[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi122[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi212[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi221[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Cos[beta],
+
+Ye1[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mem[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Clphi111[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi122[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi212[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Clphi221[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Cos[beta],
+
+Conjugate[Ye1[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mem[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Cos[beta]^3*Conjugate[Clphi111[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi122[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi212[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Clphi221[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Cos[beta],
+  
+Yd2[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mdm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi112[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi121[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi211[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cdphi222[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yd2[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mdm[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi112[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi121[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi211[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cdphi222[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+
+Yd2[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mdm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi112[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi121[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cdphi211[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cdphi222[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yd2[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mdm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi112[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi121[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cdphi211[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cdphi222[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+  
+Yu2[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mum[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi112[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi121[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi211[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cuphi222[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yu2[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mum[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi112[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi121[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi211[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cuphi222[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+
+Yu2[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mum[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi112[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi121[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi211[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cuphi222[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yu2[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mum[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi112[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi121[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi211[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cuphi222[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta]
+
+};
+
+RuleMeY = {
+
+(* Majorana neutrino mass replacement *)
+
+Cvvphi11[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2 *Cvvphi22[Index[Generation, Ext[1]], Index[Generation, Ext[2]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2*Conjugate[Cvvphi22[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]],
+  
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[2]]] -> -mvm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[2]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[2]]]] -> -mvm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[2]]]],
+  
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[1]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[1]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[1]]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] -> -mvm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[1]]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Ext[1]]]],
+
+Cvvphi11[Index[Generation, Generation$1], Index[Generation, Generation$2]] -> -mvm[Index[Generation, Generation$1]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Generation$2]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+  - Tan[beta]^2 * Cvvphi22[Index[Generation, Generation$1], Index[Generation, Generation$2]],
+  
+Conjugate[Cvvphi11[Index[Generation, Generation$1], Index[Generation, Generation$2]]] -> -mvm[Index[Generation, Generation$1]]*IndexDelta[Index[Generation, Generation$1], Index[Generation, Generation$2]]*LambdaCutoff/(2 vev^2 Cos[beta]^2)
+ - Tan[beta]^2 * Conjugate[Cvvphi22[Index[Generation, Generation$1], Index[Generation, Generation$2]]],
+
+(* Lepton/quark mass replacement *)
+
+Ye2[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mem[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi112[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi121[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi211[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Clphi222[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Ye2[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mem[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi112[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi121[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi211[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Clphi222[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+
+Ye2[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mem[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi112[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi121[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Clphi211[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Clphi222[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Ye2[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mem[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi112[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi121[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Clphi211[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Clphi222[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+  
+Yd1[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mdm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Cdphi111[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi122[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi212[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi221[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Cos[beta],
+
+Conjugate[Yd1[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mdm[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Conjugate[Cdphi111[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi122[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi212[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi221[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Cos[beta],
+
+Yd1[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mdm[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Cos[beta]^3*Cdphi111[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi122[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi212[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Cdphi221[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Cos[beta],
+
+Conjugate[Yd1[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mdm[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Cos[beta]^3*Conjugate[Cdphi111[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi122[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi212[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Cos[beta]*Sin[beta]^2*Conjugate[Cdphi221[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Cos[beta],
+  
+Yu2[Index[Generation, Ext[1]], Index[Generation, Ext[2]]] ->
+(mum[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi112[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi121[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi211[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cuphi222[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yu2[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]] ->
+(mum[Index[Generation, Ext[1]]]* IndexDelta[Index[Generation, Ext[1]], Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi112[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi121[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi211[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cuphi222[Index[Generation, Ext[2]], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta],
+
+Yu2[Index[Generation, Generation$1], Index[Generation, Ext[2]]] ->
+ (mum[Index[Generation, Ext[2]]]*IndexDelta[Index[Generation, Generation$1],
+  Index[Generation, Ext[2]]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi112[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi121[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Cuphi211[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Cuphi222[Index[Generation, Generation$1], Index[Generation, Ext[2]]]/LambdaCutoff^2)/Sin[beta],
+
+Conjugate[Yu2[Index[Generation, Generation$1], Index[Generation, Ext[1]]]] ->
+ (mum[Index[Generation, Ext[1]]]*IndexDelta[Index[Generation, Ext[1]], Index[Generation, Generation$1]]/(vev)
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi112[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi121[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]*Cos[beta]^2*Conjugate[Cuphi211[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2
+  + vev^2*Sin[beta]^3*Conjugate[Cuphi222[Index[Generation, Generation$1], Index[Generation, Ext[1]]]]/LambdaCutoff^2)/Sin[beta]
+
+};

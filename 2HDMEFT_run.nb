@@ -1,0 +1,188 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      7565,        180]
+NotebookOptionsPosition[      6376,        156]
+NotebookOutlinePosition[      6867,        174]
+CellTagsIndexPosition[      6824,        171]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+    "Directory", " ", "defined", " ", "below", " ", "must", " ", "exists"}], 
+    ",", " ", 
+    RowBox[{
+    "check", " ", "package", " ", "setup", " ", "if", " ", "necessary"}]}], 
+   " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"Please", " ", "disregard", " ", "\"\<Global\>\"", " ", "error"}], 
+   " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"$FeynRulesPath", " ", "=", " ", 
+     RowBox[{"SetDirectory", "[", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+       "Set", " ", "path", " ", "to", " ", "local", " ", "FeynRules", " ", 
+        "location"}], " ", "*)"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"THDMEFT$Path", "=", 
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{
+       "$FeynRulesPath", ",", " ", "\"\<Models\>\"", ",", " ", 
+        "\"\<2HDMEFT\>\""}], "}"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Get", "[", 
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{"$FeynRulesPath", ",", "\"\<FeynRules.m\>\""}], "}"}], "]"}], 
+     "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"LoadModel", "[", 
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{"THDMEFT$Path", ",", "\"\<2HDMEFT_model_file.fr\>\""}], "}"}], 
+      "]"}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Get", "[", 
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{
+       "THDMEFT$Path", ",", " ", "\"\<Code\>\"", ",", " ", 
+        "\"\<2HDMEFT_package.m\>\""}], "}"}], "]"}], "]"}], 
+    ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.938531598737816*^9, 3.938531601538746*^9}, {
+   3.938531644188808*^9, 3.938531668932542*^9}, {3.938531723281185*^9, 
+   3.938531791113161*^9}, {3.9385324202226048`*^9, 3.9385324207860813`*^9}, 
+   3.938709223389104*^9, {3.938709290569557*^9, 3.938709296502833*^9}, 
+   3.93871154420191*^9, 3.93871329799224*^9, {3.938713416249218*^9, 
+   3.938713428307016*^9}, 3.938713558562549*^9, {3.93871360306332*^9, 
+   3.938713671685152*^9}, {3.93871379268461*^9, 3.938713802836609*^9}, {
+   3.938713919938714*^9, 3.938713949879341*^9}, {3.938714125172866*^9, 
+   3.9387141479456882`*^9}, {3.9387142728855886`*^9, 3.938714308475395*^9}, {
+   3.938714413401293*^9, 3.9387144226677017`*^9}, {3.938718272148822*^9, 
+   3.938718273588739*^9}, 3.938718551643709*^9, {3.9387186944543943`*^9, 
+   3.938718697299658*^9}, 3.938718799653077*^9, {3.938718906020554*^9, 
+   3.938718912938878*^9}, {3.941987758321609*^9, 3.941987758684263*^9}, {
+   3.942339456345973*^9, 3.942339476388061*^9}, {3.94233968741749*^9, 
+   3.942339690744326*^9}, {3.942417313440673*^9, 3.942417341080241*^9}, {
+   3.943024665669697*^9, 3.9430246920486193`*^9}},
+ EmphasizeSyntaxErrors->
+  True,ExpressionUUID->"a88a35e0-d4ae-4e41-9aa2-9dd0bfa4bf6d"],
+
+Cell[BoxData[
+ RowBox[{"(*", " ", 
+  RowBox[{"Generates", " ", "Vertices"}], " ", "*)"}]], "Input",
+ CellChangeTimes->{{3.938531262793324*^9, 3.9385312690922213`*^9}, {
+  3.942339738806518*^9, 
+  3.942339740151925*^9}},ExpressionUUID->"7b81ebd6-3966-4241-a413-\
+30943391d6b9"],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "LeptonScalarVertices", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Clear", "[", "LeptonGaugeScalarVertices", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"GenerateLeptonVertices", "[", "]"}]}], "Input",
+ CellChangeTimes->{{3.938531292051798*^9, 3.938531294602543*^9}, {
+   3.93853990420436*^9, 3.938539952720644*^9}, {3.938540008950091*^9, 
+   3.9385400106884623`*^9}, {3.938710268849506*^9, 3.938710274254785*^9}, 
+   3.9387105142206573`*^9, {3.938711127805265*^9, 3.938711129234845*^9}, {
+   3.938711252758548*^9, 3.938711264482476*^9}, {3.938711663819358*^9, 
+   3.93871167460882*^9}},
+ CellLabel->"In[6]:=",ExpressionUUID->"e804e8f3-a9b4-46b6-9389-138e0455045f"],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "QuarkScalarVertices", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Clear", "[", "QuarkGaugeScalarVertices", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"GenerateQuarkVertices", "[", "]"}]}], "Input",
+ CellChangeTimes->{{3.9385313123963747`*^9, 3.93853131365067*^9}, {
+  3.938539960432345*^9, 3.938539969182941*^9}, {3.938540005951746*^9, 
+  3.9385400074076138`*^9}, {3.938711677113872*^9, 3.938711679070964*^9}, {
+  3.938712448092091*^9, 
+  3.938712449654544*^9}},ExpressionUUID->"61f629f1-a162-4234-8526-\
+163b675e7270"],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "ScalarVertices", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Clear", "[", "GaugeVertices", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Clear", "[", "ScalarGaugeVertices", "]"}], 
+  " "}], "\[IndentingNewLine]", 
+ RowBox[{"GenerateBosonVertices", "[", "]"}]}], "Input",
+ CellChangeTimes->{{3.938531329242188*^9, 3.938531330706171*^9}, {
+  3.938539973726824*^9, 3.938540021842472*^9}, {3.938711680089512*^9, 
+  3.938711683756258*^9}},ExpressionUUID->"6dda174f-3e68-446c-b684-\
+4ee5532e0e31"],
+
+Cell[BoxData[
+ RowBox[{"(*", " ", 
+  RowBox[{
+  "Categorizes", " ", "Feynman", " ", "Rules", " ", "in", " ", "folders", " ",
+    "and", " ", "produces", " ", "LaTeX", " ", "output"}], " ", 
+  "*)"}]], "Input",
+ CellChangeTimes->{{3.938531454778386*^9, 3.938531490246155*^9}, 
+   3.938531555560953*^9},ExpressionUUID->"c90cdf46-5ec2-4909-beac-\
+b2c827e78528"],
+
+Cell[BoxData[
+ RowBox[{"THDMEFTToLatex", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.938531540823127*^9, 3.9385315480199747`*^9}, 
+   3.938711684829893*^9},ExpressionUUID->"1d49effe-daaa-4fda-976e-\
+bfcb863f1d0e"],
+
+Cell[BoxData[
+ RowBox[{"(*", " ", 
+  RowBox[{"Generates", " ", "UFO", " ", "file"}], " ", "*)"}]], "Input",Expres\
+sionUUID->"976de3c6-a2e1-4740-81d7-a427ab4c78ba"],
+
+Cell[BoxData[
+ RowBox[{"UFO2HDMEFT", "[", "]"}]], "Input",ExpressionUUID->"be5f284a-14fd-4f2e-93f4-25787410ef03"]
+},
+WindowSize->{1172, 698},
+WindowMargins->{{Automatic, 86}, {Automatic, 0}},
+TaggingRules->{
+ "WelcomeScreenSettings" -> {"FEStarting" -> False}, "TryRealOnly" -> False},
+FrontEndVersion->"12.2 for Mac OS X x86 (64-bit) (December 12, 2020)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"623b9d3a-2669-4b89-a82b-b0cc7af34570"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 2878, 65, 157, "Input",ExpressionUUID->"a88a35e0-d4ae-4e41-9aa2-9dd0bfa4bf6d"],
+Cell[3439, 87, 276, 6, 30, "Input",ExpressionUUID->"7b81ebd6-3966-4241-a413-30943391d6b9"],
+Cell[3718, 95, 700, 11, 73, "Input",ExpressionUUID->"e804e8f3-a9b4-46b6-9389-138e0455045f"],
+Cell[4421, 108, 555, 10, 73, "Input",ExpressionUUID->"61f629f1-a162-4234-8526-163b675e7270"],
+Cell[4979, 120, 533, 10, 94, "Input",ExpressionUUID->"6dda174f-3e68-446c-b684-4ee5532e0e31"],
+Cell[5515, 132, 358, 8, 30, "Input",ExpressionUUID->"c90cdf46-5ec2-4909-beac-b2c827e78528"],
+Cell[5876, 142, 213, 4, 30, "Input",ExpressionUUID->"1d49effe-daaa-4fda-976e-bfcb863f1d0e"],
+Cell[6092, 148, 164, 3, 30, "Input",ExpressionUUID->"976de3c6-a2e1-4740-81d7-a427ab4c78ba"],
+Cell[6259, 153, 113, 1, 30, "Input",ExpressionUUID->"be5f284a-14fd-4f2e-93f4-25787410ef03"]
+}
+]
+*)
+

@@ -1,0 +1,184 @@
+(************** Begin Lagrangian *****************)
+  
+(* Dimension-four renormalizable 2HDM Lagrangian *)
+
+(******************** Gauge F^2 Lagrangian terms *************************)
+(*Sign convention from Lagrangian in between Eq. (A.9) and Eq. (A.10) of Peskin & Schroeder.*)
+
+LGaugep := Block[{mu,nu,ii,aa},
+                -1/4 FS[B,mu,nu] FS[B,mu,nu] - 1/4 FS[Wi,mu,nu,ii] FS[Wi,mu,nu,ii] - 1/4 FS[G,mu,nu,aa] FS[G,mu,nu,aa]];
+
+
+(********************* Fermion Lagrangian terms *************************)
+
+(*Sign convention from Lagrangian in between Eq. (A.9) and Eq. (A.10) of Peskin & Schroeder.*)
+
+LFermionsp := Block[{mu}, I*(LLbar.Ga[mu].DC[LL, mu] + lRbar.Ga[mu].DC[lR, mu]
+                           + QLbar.Ga[mu].DC[QL, mu] + uRbar.Ga[mu].DC[uR, mu] + dRbar.Ga[mu].DC[dR, mu])];
+                                                                                                        
+(********************* Scalar Higgs terms *************************)
+
+V2HDM:= Block[{ii,jj},
+                 m1s Phi1d4bar[ii] Phi1d4[ii] + m2s Phi2d4bar[ii] Phid42[ii]  + m12s Phi1d4bar[ii] Phi2d4[ii]  + Conjugate[m12s] Phi2d4bar[ii] Phi1d4[ii]
+               + l1/2 (Phi1d4bar[ii] Phi1d4[ii])^2 + l2/2 (Phi2d4bar[ii] Phi2d4[ii])^2 + l3 (Phi1d4bar[ii] Phi1d4[ii])(Phi2d4bar[jj] Phi2d4[jj])
+               + l4 (Phi1d4bar[ii] Phi2d4[ii])(Phi2d4bar[ii] Phi1d4[ii]) + l5/2 (Phi1d4bar[ii] Phi2d4[ii])^2 + Conjugate[l5]/2 (Phi2d4bar[ii] Phi1d4[ii])^2
+               + (Phi1d4bar[ii] Phi1d4[ii])(l6 (Phi1d4bar[ii] Phi2d4[ii]) + Conjugate[l6] (Phi2d4bar[ii] Phi1d4[ii]))
+               + (Phi2d4bar[ii] Phi2d4[ii])(l7 (Phi1d4bar[ii] Phi2d4[ii]) + Conjugate[l6] (Phi2d4bar[ii] Phi1d4[ii]))];
+
+LHiggsKinetic:= DC[Phi1d4bar[ii],mu] DC[Phi1d4[ii],mu] + DC[Phi2d4bar[ii],mu] DC[Phi2d4[ii],mu]
+          + eta DC[Phi1d4bar[ii],mu] DC[Phi2d4[ii],mu] + Conjugate[eta] DC[Phi2d4bar[ii],mu] DC[Phi1d4[ii],mu];
+ 
+(* Yukawa interactions *)
+
+LYukawap:= Block[{sp,ii,jj,cc,ff1,ff2},
+                    - ye1[ff1, ff2] LLbar[sp, ii, ff1].lR [sp, ff2] Phi1d4[ii]
+                    - ye2[ff1, ff2] LLbar[sp, ii, ff1].lR [sp, ff2] Phi2d4[ii]
+                    - yd1[ff1, ff2] QLbar[sp, ii, ff1, cc].dR [sp, ff2, cc] Phi1d4[ii]
+                    - yd2[ff1, ff2] QLbar[sp, ii, ff1, cc].dR [sp, ff2, cc] Phi2d4[ii]
+                    - yu1[ff1, ff2] QLbar[sp, ii, ff1, cc].uR [sp, ff2, cc] Eps[ii, jj] Phi1d4bar[jj]
+                    - yu2[ff1, ff2] QLbar[sp, ii, ff1, cc].uR [sp, ff2, cc] Eps[ii, jj] Phi2d4bar[jj]];
+
+
+(************* General 2HDM EFT up to mass dimension-6 *************)
+
+L5vvphip:= Block[{ff1,ff2},
+                cvvphi11[ff1,ff2] Ovvphi11[ff1,ff2]
+              + cvvphi22[ff1,ff2] Ovvphi22[ff1,ff2]
+              + cvvphi12[ff1,ff2] Ovvphi12[ff1,ff2] ]//OptimizeIndex;
+
+L6X3p:= cG OG + cGtil OGtil + cW OW + cWtil OWtil;
+
+L6phi6her:= cphi111111 Ophi111111 + cphi111122 Ophi111122 + cphi112222 Ophi112222 + cphi222222 Ophi222222 + cphi112112 Ophi112112 + cphi222112 Ophi222112;
+            
+L6phi6nher:= cphi111121 Ophi111121 + cphi222221 Ophi222221 + cphi112121 Ophi112121 + cphi222121 Ophi222121 + cphi212121 Ophi212121 + cphi212112 Ophi212112 + cphi112221 Ophi112221;
+
+            
+L6phi4D2her:= cphidpar1111 Ophidpar1111 + cphidpar2222 Ophidpar2222 + cphidpar1122 Ophidpar1122 + cphidpar2112 Ophidpar2112 + cphiD1111 OphiD1111 + cphiD2222 OphiD2222 + cphiD1122 OphiD1122 + cphiD2112 OphiD2112;
+            
+L6phi4D2nher:= cphidpar2121 Ophidpar2121 + cphidpar2111 Ophidpar2111 + cphidpar2122 Ophidpar2122 + cphiD2121 OphiD2121 + cphiD2111 OphiD2111 + cphiD2122 OphiD2122;
+             
+            
+L6X2phi2her:=  cphiG11 OphiG11 + cphiG22 OphiG22 + cphiGtil11 OphiGtil11 + cphiGtil22 OphiGtil22 + cphiB11 OphiB11 + cphiB22 OphiB22 + cphiBtil11 OphiBtil11 + cphiBtil22 OphiBtil22 + cphiW11 OphiW11 + cphiW22 OphiW22 + cphiWtil11 OphiWtil11 + cphiWtil22 OphiWtil22 + cphiWB11 OphiWB11 + cphiWB22 OphiWB22 + cphiWBtil11 OphiWBtil11 + cphiWBtil22 OphiWBtil22;
+            
+            
+L6X2phi2nher:=  cphiG21 OphiG21 + cphiGtil21 OphiGtil21 + cphiB21 OphiB21 + cphiBtil21 OphiBtil21 + cphiW21 OphiW21 + cphiWtil21 OphiWtil21 + cphiWB21 OphiWB21 + cphiWBtil21 OphiWBtil21;
+            
+
+L6psi2phi3p:= Block[{ff1,ff2},
+                 clphi111[ff1,ff2] Olphi111[ff1,ff2] + clphi122[ff1,ff2] Olphi122[ff1,ff2]
+               + clphi121[ff1,ff2] Olphi121[ff1,ff2] + clphi112[ff1,ff2] Olphi112[ff1,ff2]
+               + clphi211[ff1,ff2] Olphi211[ff1,ff2] + clphi222[ff1,ff2] Olphi222[ff1,ff2]
+               + clphi221[ff1,ff2] Olphi221[ff1,ff2] + clphi212[ff1,ff2] Olphi212[ff1,ff2]
+  
+               + cdphi111[ff1,ff2] Odphi111[ff1,ff2] + cdphi122[ff1,ff2] Odphi122[ff1,ff2]
+               + cdphi121[ff1,ff2] Odphi121[ff1,ff2] + cdphi112[ff1,ff2] Odphi112[ff1,ff2]
+               + cdphi211[ff1,ff2] Odphi211[ff1,ff2] + cdphi222[ff1,ff2] Odphi222[ff1,ff2]
+               + cdphi221[ff1,ff2] Odphi221[ff1,ff2] + cdphi212[ff1,ff2] Odphi212[ff1,ff2]
+            
+               + cuphi111[ff1,ff2] Ouphi111[ff1,ff2] + cuphi122[ff1,ff2] Ouphi122[ff1,ff2]
+               + cuphi121[ff1,ff2] Ouphi121[ff1,ff2] + cuphi112[ff1,ff2] Ouphi112[ff1,ff2]
+               + cuphi211[ff1,ff2] Ouphi211[ff1,ff2] + cuphi222[ff1,ff2] Ouphi222[ff1,ff2]
+               + cuphi221[ff1,ff2] Ouphi221[ff1,ff2] + cuphi212[ff1,ff2] Ouphi212[ff1,ff2] ]//OptimizeIndex;
+
+L6psi2Xphip:= Block[{ff1,ff2},
+                 clBphi1[ff1,ff2] OlBphi1[ff1,ff2] + clBphi2[ff1,ff2] OlBphi2[ff1,ff2]
+               + clWphi1[ff1,ff2] OlWphi1[ff1,ff2] + clWphi2[ff1,ff2] OlWphi2[ff1,ff2]
+               + cdBphi1[ff1,ff2] OdBphi1[ff1,ff2] + cdBphi2[ff1,ff2] OdBphi2[ff1,ff2]
+               + cdWphi1[ff1,ff2] OdWphi1[ff1,ff2] + cdWphi2[ff1,ff2] OdWphi2[ff1,ff2]
+               + cdGphi1[ff1,ff2] OdGphi1[ff1,ff2] + cdGphi2[ff1,ff2] OdGphi2[ff1,ff2]
+               + cuBphi1[ff1,ff2] OuBphi1[ff1,ff2] + cuBphi2[ff1,ff2] OuBphi2[ff1,ff2]
+               + cuWphi1[ff1,ff2] OuWphi1[ff1,ff2] + cuWphi2[ff1,ff2] OuWphi2[ff1,ff2]
+               + cuGphi1[ff1,ff2] OuGphi1[ff1,ff2] + cuGphi2[ff1,ff2] OuGphi2[ff1,ff2] ]//OptimizeIndex;
+            
+
+L6psi2phi2Dher:= Block[{ff1,ff2},
+                   cphie11[ff1,ff2] Ophie11[ff1,ff2]
+                 + cphie22[ff1,ff2] Ophie22[ff1,ff2]
+                 + cphil111[ff1,ff2] Ophil111[ff1,ff2]
+                 + cphil221[ff1,ff2] Ophil221[ff1,ff2]
+                 + cphil113[ff1,ff2] Ophil113[ff1,ff2]
+                 + cphil223[ff1,ff2] Ophil223[ff1,ff2]
+
+                 + cphid11[ff1,ff2] Ophid11[ff1,ff2]
+                 + cphid22[ff1,ff2] Ophid22[ff1,ff2]
+                 + cphiu11[ff1,ff2] Ophiu11[ff1,ff2]
+                 + cphiu22[ff1,ff2] Ophiu22[ff1,ff2]
+                 + cphiq111[ff1,ff2] Ophiq111[ff1,ff2]
+                 + cphiq221[ff1,ff2] Ophiq221[ff1,ff2]
+                 + cphiq113[ff1,ff2] Ophiq113[ff1,ff2]
+                 + cphiq223[ff1,ff2] Ophiq223[ff1,ff2] ]//OptimizeIndex;
+        
+L6psi2phi2Dnher:= Block[{ff1,ff2},
+                   cphie12[ff1,ff2] Ophie12[ff1,ff2]
+                 + cphil121[ff1,ff2] Ophil121[ff1,ff2]
+                 + cphil123[ff1,ff2] Ophil123[ff1,ff2]
+                 
+                 + cphid12[ff1,ff2] Ophid12[ff1,ff2]
+                 + cphiu12[ff1,ff2] Ophiu12[ff1,ff2]
+                 + cphiud11[ff1,ff2] Ophiud11[ff1,ff2]
+                 + cphiud22[ff1,ff2] Ophiud22[ff1,ff2]
+                 + cphiud21[ff1,ff2] Ophiud21[ff1,ff2]
+                 + cphiq121[ff1,ff2] Ophiq121[ff1,ff2]
+                 + cphiq123[ff1,ff2] Ophiq123[ff1,ff2] ]//OptimizeIndex;
+
+L6psi4her:= Block[{ff1,ff2,ff3,ff4},
+          cll[ff1,ff2,ff3,ff4]  Oll[ff1,ff2,ff3,ff4]
+        + cqq1[ff1,ff2,ff3,ff4] Oqq1[ff1,ff2,ff3,ff4] + cqq3[ff1,ff2,ff3,ff4] Oqq3[ff1,ff2,ff3,ff4]
+        + clq1[ff1,ff2,ff3,ff4] Olq1[ff1,ff2,ff3,ff4] + clq3[ff1,ff2,ff3,ff4] Olq3[ff1,ff2,ff3,ff4]
+         
+         + cee[ff1,ff2,ff3,ff4] Oee[ff1,ff2,ff3,ff4]
+         + cuu[ff1,ff2,ff3,ff4] Ouu[ff1,ff2,ff3,ff4] + cdd[ff1,ff2,ff3,ff4] Odd[ff1,ff2,ff3,ff4]
+         + ceu[ff1,ff2,ff3,ff4] Oeu[ff1,ff2,ff3,ff4] + ced[ff1,ff2,ff3,ff4] Oed[ff1,ff2,ff3,ff4]
+         + cud1[ff1,ff2,ff3,ff4] Oud1[ff1,ff2,ff3,ff4] + cud8[ff1,ff2,ff3,ff4] Oud8[ff1,ff2,ff3,ff4]
+         
+        + cle[ff1,ff2,ff3,ff4] Ole[ff1,ff2,ff3,ff4] + cqe[ff1,ff2,ff3,ff4] Oqe[ff1,ff2,ff3,ff4]
+        + clu[ff1,ff2,ff3,ff4] Olu[ff1,ff2,ff3,ff4] + cld[ff1,ff2,ff3,ff4] Old[ff1,ff2,ff3,ff4]
+        + cqu1[ff1,ff2,ff3,ff4] Oqu1[ff1,ff2,ff3,ff4] + cqu8[ff1,ff2,ff3,ff4] Oqu8[ff1,ff2,ff3,ff4]
+        + cqd1[ff1,ff2,ff3,ff4] Oqd1[ff1,ff2,ff3,ff4] + cqd8[ff1,ff2,ff3,ff4] Oqd8[ff1,ff2,ff3,ff4]
+         ]//OptimizeIndex;
+         
+         
+L6psi4nher:= Block[{ff1,ff2,ff3,ff4},
+              cledq[ff1,ff2,ff3,ff4]  Oledq[ff1,ff2,ff3,ff4]
+            + cquqd1[ff1,ff2,ff3,ff4] Oquqd1[ff1,ff2,ff3,ff4]
+            + cquqd8[ff1,ff2,ff3,ff4] Oquqd8[ff1,ff2,ff3,ff4]
+            + clequ1[ff1,ff2,ff3,ff4] Olequ1[ff1,ff2,ff3,ff4]
+            + clequ3[ff1,ff2,ff3,ff4] Olequ3[ff1,ff2,ff3,ff4]
+            
+            + cduq[ff1,ff2,ff3,ff4] Oduq[ff1,ff2,ff3,ff4]
+            + cqqu[ff1,ff2,ff3,ff4] Oqqu[ff1,ff2,ff3,ff4]
+            + cqqq[ff1,ff2,ff3,ff4] Oqqq[ff1,ff2,ff3,ff4]
+            + cduu[ff1,ff2,ff3,ff4] Oduu[ff1,ff2,ff3,ff4]
+             ]//OptimizeIndex;
+
+LYukawa:= ExpandIndices[LYukawap + HC[LYukawap], FlavorExpand -> {SU2D}] /. FeynmanGaugeRule /. Ruleyuk /. Ruled4 /. RuleAlignLimit /. Rule2hdmType;
+    
+LFermions:= ExpandIndices[LFermionsp, FlavorExpand -> {SU2D,SU2W}] /. Ruleferm /. Rulegauge /. Rulee /. Ruled4 /. RuleAlignLimit /. Rule2hdmType;
+
+LHiggs:= ExpandIndices[LHiggsKinetic - V2HDM, FlavorExpand -> {SU2D,SU2W}] /. FeynmanGaugeRule /. Rulegauge /. Rulee /. Ruled4 /. RuleAlignLimit /. Rule2hdmType;
+
+LGauge:= ExpandIndices[LGaugep, FlavorExpand -> {SU2W}] /. Rulegauge /. Rulee /. Ruled4 /. RuleAlignLimit /. Rule2hdmType;
+    
+L5vvphi:= ExpandIndices[(L5vvphip + HC[L5vvphip])/LambdaCutoff, FlavorExpand->{SU2D}] /. FeynmanGaugeRule /. Rulevv /. RuleAlignLimit /. Rule2hdmType;
+    
+L6X3:= ExpandIndices[L6X3p/LambdaCutoff^2, FlavorExpand ->{SU2W}] /. Rulegauge /. Rulee /. Ruled4 /. RuleAlignLimit /. Rule2hdmType;
+
+L6phi6:= ExpandIndices[(L6phi6her + L6phi6nher + HC[L6phi6nher])/LambdaCutoff^2, FlavorExpand->{SU2D}] /. FeynmanGaugeRule /. RuleAlignLimit /. Rule2hdmType;
+    
+L6phi4D2:= ExpandIndices[(L6phi4D2her + L6phi4D2nher + HC[L6phi4D2nher])/LambdaCutoff^2, FlavorExpand->{SU2D, SU2W}] /. FeynmanGaugeRule /. Rulegauge /. Rulee /. Ruled4 /. RuleAlignLimit /. Rule2hdmType;
+
+L6X2phi2:= ExpandIndices[(L6X2phi2her + L6X2phi2nher + HC[L6X2phi2nher])/LambdaCutoff^2, FlavorExpand->{SU2D, SU2W}] /. FeynmanGaugeRule /. Rulegauge /. Rulee /. Ruled4 /. RuleAlignLimit /. Rule2hdmType;
+
+L6psi2phi3:= ExpandIndices[(L6psi2phi3p + HC[L6psi2phi3p])/LambdaCutoff^2, FlavorExpand->{SU2D, SU2W}] /. FeynmanGaugeRule /.
+              Rulepsi2phi3 /. RuleAlignLimit /. Rule2hdmType;
+    
+L6psi2Xphi:= ExpandIndices[(L6psi2Xphip + HC[L6psi2Xphip])/LambdaCutoff^2, FlavorExpand->{SU2D, SU2W}] /. FeynmanGaugeRule /.
+            Rulepsi2Xphi /. RuleAlignLimit /. Rule2hdmType;
+
+L6psi2phi2D:= ExpandIndices[( L6psi2phi2Dher + L6psi2phi2Dnher + HC[L6psi2phi2Dnher])/ LambdaCutoff^2, FlavorExpand->{SU2D, SU2W}] /. FeynmanGaugeRule /. Rulepsi2phi2D /. Rulegauge /. Rulee /. RuleAlignLimit /. Rule2hdmType;
+
+L6psi4:= ExpandIndices[(L6psi4her + L6psi4nher + HC[L6psi4nher])/LambdaCutoff^2, FlavorExpand->{SU2D, SU2W}] /. RuleAlignLimit /. Rule2hdmType;
+    
+L42HDM := LGauge + LFermions + LHiggs + LYukawa;
+L2HDMEFT:= L5vvphi + L6phi6 + L6phi4D2 + L6X2phi2 + L6psi2phi3 + L6psi2Xphi + L6psi2phi2D; (* + L6X3 + L6psi4 *)
+

@@ -1,0 +1,519 @@
+(**********************************************)
+(* ***         field definitions          *** *)
+(**********************************************)
+
+M$ClassesDescription = {
+
+(* Gauge bosons: physical vector fields *)
+  V[1] == {
+    ClassName       -> A,
+    SelfConjugate   -> True,
+    Mass            -> 0,
+    Width           -> 0,
+    ParticleName    -> "a",
+    PDG             -> 22,
+    PropagatorLabel -> "a",
+    PropagatorType  -> W,
+    PropagatorArrow -> None,
+    FullName        -> "Photon"
+  },
+  V[2] == {
+    ClassName       -> Z,
+    SelfConjugate   -> True,
+    Mass            -> {MZ,91.1876},
+    Width           -> {WZ, 2.4952},
+    ParticleName    -> "Z",
+    PDG             -> 23,
+    PropagatorLabel -> "Z",
+    PropagatorType  -> Sine,
+    PropagatorArrow -> None,
+    FullName        -> "Z"
+  },
+  V[3] == {
+    ClassName        -> W,
+    SelfConjugate    -> False,
+    Mass             -> {MW, Internal},
+    Width            -> {WW, 2.085},
+    ParticleName     -> "W+",
+    AntiParticleName -> "W-",
+    QuantumNumbers   -> {Q -> 1},
+    PDG              -> 24,
+    PropagatorLabel  -> "W",
+    PropagatorType   -> Sine,
+    PropagatorArrow  -> Forward,
+    FullName         -> "W"
+  },
+  V[4] == {
+    ClassName        -> G,
+    SelfConjugate    -> True,
+    Indices          -> {Index[Gluon]},
+    Mass             -> 0,
+    Width            -> 0,
+    ParticleName     -> "g",
+    PDG              -> 21,
+    PropagatorLabel  -> "G",
+    PropagatorType   -> C,
+    PropagatorArrow  -> None,
+    FullName         -> "G"
+  },
+
+(* Gauge bosons: unphysical vector fields *)
+(* Redefinition of unphysical gauge bosons after electroweak symmetry breaking *)
+
+  V[11] == {
+    ClassName     -> B,
+    Unphysical    -> True,
+    SelfConjugate -> True,
+    Definitions   -> { B[mu_] -> (A[mu] ee/(g1/ZB) - Z[mu] (g1/ZB + xWB (gw/ZW)^3/((g1/ZB)^2 + (gw/ZW)^2)/LambdaCutoff^2 ) / Sqrt[(g1/ZB)^2 + (gw/ZW)^2] )/ZB }
+    
+  },
+  V[12] == {
+    ClassName     -> Wi,
+    Unphysical    -> True,
+    SelfConjugate -> True,
+    Indices       -> {Index[SU2W]},
+    FlavorIndex   -> SU2W,
+    Definitions   -> { Wi[mu_,1] ->    (Wbar[mu] + W[mu])/Sqrt[2]/ZW,
+                       Wi[mu_,2] -> -I (Wbar[mu] - W[mu])/Sqrt[2]/ZW,
+                       Wi[mu_,3] -> (A[mu] ee/(gw/ZW) + Z[mu] (gw/ZW + xWB (g1/ZB)^3/((g1/ZB)^2 + (gw/ZW)^2)/LambdaCutoff^2 ) / Sqrt[(g1/ZB)^2 + (gw/ZW)^2] )/ZW }
+  },
+    V[13] == {
+    ClassName        -> Gl,
+    Unphysical       -> True,
+    Mass             -> 0,
+    SelfConjugate    -> True,
+    Indices          -> {Index[Gluon]},
+    Definitions      -> { Gl[mu_, a_] -> G[mu, a]/ZG }
+  },
+
+(* Fermions: physical fields *)
+  F[1] == {
+    ClassName        -> vl,
+    ClassMembers     -> {ve,vm,vt},
+    Indices          -> {Index[Generation]},
+    FlavorIndex      -> Generation,
+    SelfConjugate    -> False,
+    Mass             -> 0,
+    Width            -> 0,
+    QuantumNumbers   -> {LeptonNumber -> 1},
+    PropagatorLabel  -> {"v", "ve", "vm", "vt"} ,
+    PropagatorType   -> S,
+    PropagatorArrow  -> Forward,
+    PDG              -> {12,14,16},
+    ParticleName     -> {"ve","vm","vt"},
+    AntiParticleName -> {"ve~","vm~","vt~"},
+    FullName         -> {"Electron-neutrino", "Mu-neutrino", "Tau-neutrino"}
+  },
+  F[2] == {
+    ClassName        -> l,
+    ClassMembers     -> {e, mu, ta},
+    Indices          -> {Index[Generation]},
+    FlavorIndex      -> Generation,
+    SelfConjugate    -> False,
+    Mass             -> {Ml, {Me,5.11*^-4}, {MMU,0.10566}, {MTA,1.777}},
+    Width            -> 0,
+    QuantumNumbers   -> {Q -> -1, LeptonNumber -> 1},
+    PropagatorLabel  -> {"l", "e", "mu", "ta"},
+    PropagatorType   -> Straight,
+    PropagatorArrow  -> Forward,
+    PDG              -> {11, 13, 15},
+    ParticleName     -> {"e-", "mu-", "ta-"},
+    AntiParticleName -> {"e+", "mu+", "ta+"},
+    FullName         -> {"Electron", "Muon", "Tau"}
+  },
+  F[3] == {
+    ClassName        -> uq,
+    ClassMembers     -> {u, c, t},
+    Indices          -> {Index[Generation], Index[Colour]},
+    FlavorIndex      -> Generation,
+    SelfConjugate    -> False,
+    Mass             -> {Mu, {MU, 2.16*^-3}, {MC,1.27}, {MT,172.76}},
+    Width            -> {0, 0, {WT, 1.33}},
+    QuantumNumbers   -> {Q -> 2/3},
+    PropagatorLabel  -> {"uq", "u", "c", "t"},
+    PropagatorType   -> Straight,
+    PropagatorArrow  -> Forward,
+    PDG              -> {2, 4, 6},
+    ParticleName     -> {"u",  "c",  "t" },
+    AntiParticleName -> {"u~", "c~", "t~"},
+    FullName         -> {"u-quark", "c-quark", "t-quark"}
+  },
+  F[4] == {
+    ClassName        -> dq,
+    ClassMembers     -> {d, s, b},
+    Indices          -> {Index[Generation], Index[Colour]},
+    FlavorIndex      -> Generation,
+    SelfConjugate    -> False,
+    Mass             -> {Md, {MD,4.67*^-3}, {MS,0.093}, {MB,4.18}},
+    Width            -> 0,
+    QuantumNumbers   -> {Q -> -1/3},
+    PropagatorLabel  -> {"dq", "d", "s", "b"},
+    PropagatorType   -> Straight,
+    PropagatorArrow  -> Forward,
+    PDG              -> {1,3,5},
+    ParticleName     -> {"d",  "s",  "b" },
+    AntiParticleName -> {"d~", "s~", "b~"},
+    FullName         -> {"d-quark", "s-quark", "b-quark"}
+  },
+
+(* Fermions: unphysical fields *)
+  F[11] == {
+    ClassName      -> LL,
+    Unphysical     -> True,
+    Indices        -> {Index[SU2D], Index[Generation]},
+    FlavorIndex    -> SU2D,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> -1/2},
+    Definitions    -> { LL[sp1_,1,ff_] :> Module[{sp2,ff2}, ProjM[sp1,sp2] ULv[ff,ff2] vl[sp2,ff2]],
+                        LL[sp1_,2,ff_] :> Module[{sp2,ff2}, ProjM[sp1,sp2] ULe[ff,ff2] l[sp2,ff2]] }
+  },
+  F[12] == {
+    ClassName      -> lR,
+    Unphysical     -> True,
+    Indices        -> {Index[Generation]},
+    FlavorIndex    -> Generation,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> -1},
+    Definitions    -> { lR[sp1_,ff_] :> Module[{sp2,ff2}, ProjP[sp1,sp2] URe[ff,ff2] l[sp2,ff2]] }
+  },
+  F[13] == {
+    ClassName      -> QL,
+    Unphysical     -> True,
+    Indices        -> {Index[SU2D], Index[Generation], Index[Colour]},
+    FlavorIndex    -> SU2D,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> 1/6},
+    Definitions    -> {
+      QL[sp1_,1,ff_,cc_] :> Module[{sp2,ff2}, ProjM[sp1,sp2] ULu[ff,ff2] uq[sp2,ff2,cc]],
+      QL[sp1_,2,ff_,cc_] :> Module[{sp2,ff2}, ProjM[sp1,sp2] ULd[ff,ff2] dq[sp2,ff2,cc]] }
+  },
+
+  F[14] == {
+    ClassName      -> uR,
+    Unphysical     -> True,
+    Indices        -> {Index[Generation], Index[Colour]},
+    FlavorIndex    -> Generation,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> 2/3},
+    Definitions    -> { uR[sp1_,ff_,cc_] :> Module[{sp2,ff2}, ProjP[sp1,sp2] URu[ff,ff2] uq[sp2,ff2,cc]] }
+  },
+  F[15] == {
+    ClassName      -> dR,
+    Unphysical     -> True,
+    Indices        -> {Index[Generation], Index[Colour]},
+    FlavorIndex    -> Generation,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> -1/3},
+    Definitions    -> { dR[sp1_,ff_,cc_] :> Module[{sp2,ff2}, ProjP[sp1,sp2] URd[ff,ff2] dq[sp2,ff2,cc]] }
+  }
+};
+
+M$HiggsFieldsCPC = {
+
+(* Higgs scalars *)
+(* In CP-conserving theories, h1 -> h, h2 -> H and h3 -> A otherwise, (h1,h2,h3) are physical scalars *)
+  
+(* Higgs doublets: unphysical scalars  *)
+
+(* Fist block applies to dimension-4 terms at the appropriate expansion order *)
+
+  S[11] == {
+    ClassName      -> Phi1d4,
+    Unphysical     -> True,
+    Indices        -> {Index[SU2D]},
+    FlavorIndex    -> SU2D,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> 1/2},
+    Definitions    -> { Phi1d4[1] -> Cos[beta]*(1 - dcbhpm / LambdaCutoff^2) GP - Sin[beta]*(1 - dsbhpm / LambdaCutoff^2) HP - eta/2(Sin[beta] GP + Cos[beta] HP),
+                        Phi1d4[2] -> vevd4 Cos[beta] + ( (Cos[alphah] H - Sin[alphah] h)*(1 - A1/2 / LambdaCutoff^2 )
+                                                  - Bc/2 (Sin[alphah] H + Cos[alphah] h) / LambdaCutoff^2
+                                                + I ( (Cos[beta]*(1 - dcbh / LambdaCutoff^2) G0 - Sin[beta]*(1 - dsbh / LambdaCutoff^2) A0)*(1 - A1p/2 / LambdaCutoff^2 )
+                                                      - Bcp/2 (Sin[beta] G0 + Cos[beta] A0) / LambdaCutoff^2 ) ) /Sqrt[2]  }
+                                                    
+  },
+  
+  S[12] == {
+    ClassName      -> Phi2d4,
+    Unphysical     -> True,
+    Indices        -> {Index[SU2D]},
+    FlavorIndex    -> SU2D,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> 1/2},
+    Definitions    -> { Phi2d4[1] -> - Conjugate[eta]/2 (Cos[beta] GP - Sin[beta] HP) + Sin[beta]*(1 - dsbhpm / LambdaCutoff^2) GP + Cos[beta]*(1 - dcbhpm / LambdaCutoff^2) HP,
+                        Phi2d4[2] -> vevd4 Sin[beta] + ( - Bc/2 (Cos[alphah] H - Sin[alphah] h) / LambdaCutoff^2
+                                                      + (Sin[alphah] H + Cos[alphah] h)*(1 - A2/2 / LambdaCutoff^2 )
+                                                    + I ( - Bcp/2 (Cos[beta] G0 - Sin[beta] A0) / LambdaCutoff^2
+                                                         + (Sin[beta]*(1 - dsbh / LambdaCutoff^2) G0 + Cos[beta]*(1 - dcbh / LambdaCutoff^2) A0)*(1 - A2p/2 / LambdaCutoff^2 ) ) ) /Sqrt[2]  }
+                                
+  },
+  
+  (* Second block applies to dimension-6 terms at the appropriate expansion order *)
+  
+  S[13] == {
+    ClassName      -> Phi1,
+    Unphysical     -> True,
+    Indices        -> {Index[SU2D]},
+    FlavorIndex    -> SU2D,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> 1/2},
+    Definitions    -> { Phi1[1] -> Cos[beta] GP - Sin[beta] HP,
+                        Phi1[2] -> vev Cos[beta] + (Cos[alphah] H - Sin[alphah] h + I (Cos[beta] G0 - Sin[beta] A0)) / Sqrt[2]  }
+  },
+  
+  S[14] == {
+    ClassName      -> Phi2,
+    Unphysical     -> True,
+    Indices        -> {Index[SU2D]},
+    FlavorIndex    -> SU2D,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> 1/2},
+    Definitions    -> { Phi2[1] -> Sin[beta] GP + Cos[beta] HP,
+                        Phi2[2] -> vev Sin[beta] + (Sin[alphah] H + Cos[alphah] h + I (Sin[beta] G0 + Cos[beta] A0)) /Sqrt[2]  }
+  },
+  
+  S[1] == {
+    ClassName       -> G0,
+    SelfConjugate   -> True,
+    Goldstone       -> Z,
+    Mass            -> {MZ, 91.1876},
+    Width           -> {WZ, 2.4952},
+    PropagatorLabel -> "Go",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    PDG             -> 250,
+    ParticleName    -> "G0",
+    FullName        -> "G0"
+  },
+  S[2] == {
+    ClassName        -> GP,
+    SelfConjugate    -> False,
+    Goldstone        -> W,
+    Mass             -> {MW, Internal},
+    QuantumNumbers   -> {Q -> 1},
+    Width            -> {WW, 2.085},
+    PropagatorLabel  -> "GP",
+    PropagatorType   -> D,
+    PropagatorArrow  -> None,
+    PDG              -> 251,
+    ParticleName     -> "G+",
+    AntiParticleName -> "G-",
+    FullName         -> "GP"
+  },
+  S[3] == {
+    ClassName       -> HP,
+    SelfConjugate   -> False,
+    QuantumNumbers -> {Q -> 1},
+    Mass            -> {MHP, 500},
+    Width           -> {WHP, 1},
+    PropagatorLabel -> "HP",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    ParticleName    -> "H+",
+    AntiParticleName-> "H-",
+    FullName        -> "HP"
+  },
+  S[4] == {
+    ClassName       -> A0,
+    SelfConjugate   -> True,
+    Mass            -> {MA, 500},
+    Width           -> {WA, 1},
+    PropagatorLabel -> "Ao",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    ParticleName    -> "A0",
+    FullName        -> "A0"
+  },
+  S[5] == {
+    ClassName       -> H,
+    SelfConjugate   -> True,
+    Mass            -> {MH, 500},
+    Width           -> {WH, 1},
+    PropagatorLabel -> "H",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    ParticleName    -> "H",
+    FullName        -> "H"
+  },
+  S[6] == {
+    ClassName       -> h,
+    SelfConjugate   -> True,
+    Mass            -> {Mh, 125.09},
+    Width           -> {Wh, 0.00407},
+    PropagatorLabel -> "h",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    PDG             -> 25,
+    ParticleName    -> "h",
+    FullName        -> "h"
+  }
+};
+
+
+
+
+
+(* Strong CP violation *)
+
+M$HiggsFieldsCPV = {
+
+(* Fist block applies to dimension-4 terms at the appropriate expansion order *)
+
+  S[11] == {
+    ClassName      -> Phi1d4,
+    Unphysical     -> True,
+    Indices        -> {Index[SU2D]},
+    FlavorIndex    -> SU2D,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> 1/2},
+    Definitions    -> { Phi1d4[1] -> Cos[beta]*(1 - dcbhpm / LambdaCutoff^2) GP - Sin[beta]*(1 - dsbhpm / LambdaCutoff^2) HP - eta/2(Sin[beta] GP + Cos[beta] HP),
+                        Phi1d4[2] -> vevd4 Cos[beta] + ( (Cos[alphah] H - Sin[alphah] h)*(1 - A1/2 / LambdaCutoff^2 )
+                                                  - Bc/2 (Sin[alphah] H + Cos[alphah] h) / LambdaCutoff^2
+                                                  - Jc/2 (Cos[beta] G0 - Sin[beta] A0) / LambdaCutoff^2
+                                                  - Kc/2 (Sin[beta] G0 + Cos[beta] A0) / LambdaCutoff^2
+                                                + I ( - Jc/2 (Cos[alphah] H - Sin[alphah] h) / LambdaCutoff^2
+                                                      - Lc/2 (Sin[alphah] H + Cos[alphah] h) / LambdaCutoff^2
+                                                      + (Cos[beta]*(1 - dcbh / LambdaCutoff^2) G0 - Sin[beta]*(1 - dsbh / LambdaCutoff^2) A0)*(1 - A1p/2 / LambdaCutoff^2 )
+                                                      - Bcp/2 (Sin[beta] G0 + Cos[beta] A0) / LambdaCutoff^2 ) ) /Sqrt[2]  }
+  },
+  
+  S[12] == {
+    ClassName      -> Phi2d4,
+    Unphysical     -> True,
+    Indices        -> {Index[SU2D]},
+    FlavorIndex    -> SU2D,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> 1/2},
+    Definitions    -> { Phi2d4[1] -> - Conjugate[eta]/2 (Cos[beta] GP - Sin[beta] HP) + Sin[beta]*(1 - dsbhpm / LambdaCutoff^2) GP + Cos[beta]*(1 - dcbhpm / LambdaCutoff^2) HP,
+                        Phi2d4[2] -> vevd4 Sin[beta] + ( - Bc/2 (Cos[alphah] H - Sin[alphah] h) / LambdaCutoff^2
+                                                      + (Sin[alphah] H + Cos[alphah] h)*(1 - A2/2 / LambdaCutoff^2 )
+                                                      - Lc/2 (Cos[beta] G0 - Sin[beta] A0) / LambdaCutoff^2
+                                                      - Nc/2 (Sin[beta] G0 + Cos[beta] A0) / LambdaCutoff^2
+                                                    + I ( - Bcp/2 (Cos[beta] G0 - Sin[beta] A0) / LambdaCutoff^2
+                                                          - Kc/2 (Cos[alphah] H - Sin[alphah] h) / LambdaCutoff^2
+                                                          - Nc/2 (Sin[alphah] H + Cos[alphah] h) / LambdaCutoff^2
+                                                         + (Sin[beta]*(1 - dsbh / LambdaCutoff^2) G0 + Cos[beta]*(1 - dcbh / LambdaCutoff^2) A0)*(1 - A2p/2 / LambdaCutoff^2 ) ) ) /Sqrt[2]  }
+  },
+  
+  (* Second block applies to dimension-6 terms at the appropriate expansion order *)
+  
+  S[13] == {
+    ClassName      -> Phi1,
+    Unphysical     -> True,
+    Indices        -> {Index[SU2D]},
+    FlavorIndex    -> SU2D,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> 1/2},
+    Definitions    -> { Phi1[1] -> Cos[beta] GP - Sin[beta] HP,
+                        Phi1[2] -> vev Cos[beta] + (Cos[alphah] H - Sin[alphah] h + I (Cos[beta] G0 - Sin[beta] A0)) / Sqrt[2]  }
+  },
+  
+  S[14] == {
+    ClassName      -> Phi2,
+    Unphysical     -> True,
+    Indices        -> {Index[SU2D]},
+    FlavorIndex    -> SU2D,
+    SelfConjugate  -> False,
+    QuantumNumbers -> {Y -> 1/2},
+    Definitions    -> { Phi2[1] -> Sin[beta] GP + Cos[beta] HP,
+                        Phi2[2] -> vev Sin[beta] + (Sin[alphah] H + Cos[alphah] h + I (Sin[beta] G0 + Cos[beta] A0)) /Sqrt[2]  }
+  },
+  
+  S[1] == {
+    ClassName       -> G0,
+    SelfConjugate   -> True,
+    Goldstone       -> Z,
+    Mass            -> {MZ, 91.1876},
+    Width           -> {WZ, 2.4952},
+    PropagatorLabel -> "Go",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    PDG             -> 250,
+    ParticleName    -> "G0",
+    FullName        -> "G0"
+  },
+  S[2] == {
+    ClassName        -> GP,
+    SelfConjugate    -> False,
+    Goldstone        -> W,
+    Mass             -> {MW, Internal},
+    QuantumNumbers   -> {Q -> 1},
+    Width            -> {WW, 2.085},
+    PropagatorLabel  -> "GP",
+    PropagatorType   -> D,
+    PropagatorArrow  -> None,
+    PDG              -> 251,
+    ParticleName     -> "G+",
+    AntiParticleName -> "G-",
+    FullName         -> "GP"
+  },
+  S[3] == {
+    ClassName       -> HP,
+    SelfConjugate   -> False,
+    QuantumNumbers -> {Q -> 1},
+    Mass            -> {MHP, 500},
+    Width           -> {WHP, 1},
+    PropagatorLabel -> "HP",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    ParticleName    -> "H+",
+    AntiParticleName-> "H-",
+    FullName        -> "HP"
+  },
+  S[4] == {
+    ClassName       -> h1,
+    SelfConjugate   -> True,
+    Mass            -> {Mh1, Internal},
+    Width           -> {Wh1, 1},
+    PropagatorLabel -> "h1",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    ParticleName    -> "h1",
+    FullName        -> "h1"
+  },
+  S[5] == {
+    ClassName       -> h2,
+    SelfConjugate   -> True,
+    Mass            -> {Mh2, Internal},
+    Width           -> {Wh2, 1},
+    PropagatorLabel -> "h2",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    ParticleName    -> "h2",
+    FullName        -> "h2"
+  },
+  S[6] == {
+    ClassName       -> h3,
+    SelfConjugate   -> True,
+    Mass            -> {Mh3, Internal},
+    Width           -> {Wh3, 1},
+    PropagatorLabel -> "h3",
+    PropagatorType  -> D,
+    PropagatorArrow -> None,
+    ParticleName    -> "h3",
+    FullName        -> "h3"
+  },
+  
+  S[7] == {
+    ClassName       -> A0,
+    Unphysical      -> True,
+    SelfConjugate   -> True,
+    Definitions     -> {A0 -> Cos[xi]*(1 - dcxh / LambdaCutoff^2) Cos[omega]*(1 - dcwh / LambdaCutoff^2) h3
+                            - Cos[xi]*(1 - dcxh / LambdaCutoff^2) Sin[omega]*(1 - dswh / LambdaCutoff^2) h2
+                            + Sin[xi]*(1 - dsxh / LambdaCutoff^2) h1 }
+  },
+  S[8] == {
+    ClassName       -> H,
+    Unphysical      -> True,
+    SelfConjugate   -> True,
+    Definitions     -> {H -> Sin[omega]*(1 - dswh / LambdaCutoff^2) h3
+                           + Cos[omega]*(1 - dcwh / LambdaCutoff^2) h2 }
+  },
+  S[9] == {
+    ClassName       -> h,
+    Unphysical      -> True,
+    SelfConjugate   -> True,
+    Definitions     -> {h -> - Sin[xi]*(1 - dsxh / LambdaCutoff^2) Cos[omega]*(1 - dcwh / LambdaCutoff^2) h3
+                             + Sin[xi]*(1 - dsxh / LambdaCutoff^2) Sin[omega]*(1 - dswh / LambdaCutoff^2) h2
+                             + Cos[xi]*(1 - dcxh / LambdaCutoff^2) h1 }
+  }
+};

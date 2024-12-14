@@ -1,0 +1,601 @@
+(***************************************************)
+(* ***  definitions of dimension 6 operators   *** *)
+(* ***  all flavor assumptions                 *** *)
+(***************************************************)
+
+
+        
+(* sigma_munu spin tensor *)
+
+sigmaT[mu_,nu_,sp1_,sp2_]:= I/2 Module[ {sp3}, Ga[mu,sp1,sp3].Ga[nu,sp3,sp2]-Ga[nu,sp1,sp3].Ga[mu,sp3,sp2] ];
+
+(*** Begin Operators ***)
+        
+(*** Dimension-5 Weinberg operators ***)
+
+
+Ovvphi11[ff1_,ff2_]:= Block[{sp1,sp2,jj,kk,mm,nn,ff1,ff2},
+    Eps[jj,kk] Eps[mm,nn] Phi1[jj] Phi1[mm] HC[CC[LL][sp1,kk,ff1]].Ga[0,sp1,sp2].LL[sp2,nn,ff2] ];
+
+Ovvphi22[ff1_,ff2_]:= Block[{sp1,sp2,jj,kk,mm,nn,ff1,ff2},
+    Eps[jj,kk] Eps[mm,nn] Phi2[jj] Phi2[mm] HC[CC[LL][sp1,kk,ff1]].Ga[0,sp1,sp2].LL[sp2,nn,ff2] ];
+    
+Ovvphi12[ff1_,ff2_]:= Block[{sp1,sp2,jj,kk,mm,nn,ff1,ff2},
+    Eps[jj,kk] Eps[mm,nn] Phi1[jj] Phi2[mm] HC[CC[LL][sp1,kk,ff1]].Ga[0,sp1,sp2].LL[sp2,nn,ff2] ];
+      
+(*** class X^3 ***)
+
+OG:= Block[{mu,nu,ro,aa,bb,cc},
+    f[aa,bb,cc] FS[Gl,mu,nu,aa] FS[Gl,nu,ro,bb] FS[Gl,ro,mu,cc]
+      ];
+
+OGtil:= Block[{mu,nu,ro,sig,lam,aa,bb,cc},
+    f[aa,bb,cc] 1/2 Eps[mu,nu,sig,lam] FS[Gl,sig,lam,aa] FS[Gl,nu,ro,bb] FS[Gl,ro,mu,cc]
+      ];
+
+OW:= Block[{mu,nu,ro,ii,jj,kk},
+        Eps[ii,jj,kk] FS[Wi,mu,nu,ii] FS[Wi,nu,ro,jj] FS[Wi,ro,mu,kk]
+      ];
+
+OWtil:= Block[{mu,nu,ro,lam,sig,ii,jj,kk},
+        Eps[ii,jj,kk] 1/2 Eps[mu,nu,lam,sig] FS[Wi,lam,sig,ii] FS[Wi,nu,ro,jj] FS[Wi,ro,mu,kk]
+      ];
+
+(*** class phi^6 ***)
+
+Ophi111111:= Block[{ii,jj,kk},
+      Phi1bar[ii] Phi1[ii] Phi1bar[jj] Phi1[jj] Phi1bar[kk] Phi1[kk]
+    ];
+Ophi111122:= Block[{ii,jj,kk},
+      Phi1bar[ii] Phi1[ii] Phi1bar[jj] Phi1[jj] Phi2bar[kk] Phi2[kk]
+    ];
+Ophi222211:= Block[{ii,jj,kk},
+      Phi1bar[ii] Phi1[ii] Phi2bar[jj] Phi2[jj] Phi2bar[kk] Phi2[kk]
+    ];
+Ophi222222:= Block[{ii,jj,kk},
+      Phi2bar[ii] Phi2[ii] Phi2bar[jj] Phi2[jj] Phi2bar[kk] Phi2[kk]
+    ];
+Ophi112112:= Block[{ii,jj,kk},
+      Phi1bar[ii] Phi1[ii] Phi2bar[jj] Phi1[jj] Phi1bar[kk] Phi2[kk]
+    ];
+Ophi222112:= Block[{ii,jj,kk},
+      Phi2bar[ii] Phi2[ii] Phi2bar[jj] Phi1[jj] Phi1bar[kk] Phi2[kk]
+    ];
+
+(*** non-Hermitian ***)
+
+Ophi111121:= Block[{ii,jj,kk},
+      Phi1bar[ii] Phi1[ii] Phi1bar[jj] Phi1[jj] Phi2bar[kk] Phi1[kk]
+    ];
+Ophi222221:= Block[{ii,jj,kk},
+      Phi2bar[ii] Phi2[ii] Phi2bar[jj] Phi2[jj] Phi2bar[kk] Phi1[kk]
+    ];
+Ophi112121:= Block[{ii,jj,kk},
+      Phi1bar[ii] Phi1[ii] Phi2bar[jj] Phi1[jj] Phi2bar[kk] Phi1[kk]
+    ];
+Ophi222121:= Block[{ii,jj,kk},
+      Phi2bar[ii] Phi2[ii] Phi2bar[jj] Phi1[jj] Phi2bar[kk] Phi1[kk]
+    ];
+Ophi212121:= Block[{ii,jj,kk},
+      Phi2bar[ii] Phi1[ii] Phi2bar[jj] Phi1[jj] Phi2bar[kk] Phi1[kk]
+    ];
+Ophi212112:= Block[{ii,jj,kk},
+      Phi2bar[ii] Phi1[ii] Phi2bar[jj] Phi1[jj] Phi1bar[kk] Phi2[kk]
+    ];
+Ophi112221:= Block[{ii,jj,kk},
+      Phi1bar[ii] Phi1[ii] Phi2bar[jj] Phi2[jj] Phi2bar[kk] Phi1[kk]
+    ];
+
+(*** class phi^4 D^2 ***)
+
+Ophidpar1111:= Block[{ii,jj,mu},
+ 	 del[Phi1bar[ii]Phi1[ii],mu]del[Phi1bar[jj] Phi1[jj],mu]
+	];
+OphiD1111:= Block[{mu, ii, jj, kk, ll},
+                (Phi1bar[ii] DC[Phi1[ii],mu] - DC[Phi1bar[jj],mu] Phi1[jj])*(Phi1bar[kk] DC[Phi1[kk],mu] - DC[Phi1bar[ll],mu] Phi1[ll])
+    ];
+    
+Ophidpar2222:= Block[{ii,jj,mu},
+      del[Phi2bar[ii]Phi2[ii],mu]del[Phi2bar[jj] Phi2[jj],mu]
+    ];
+OphiD2222:= Block[{mu, ii, jj, kk, ll},
+                (Phi2bar[ii] DC[Phi2[ii],mu] - DC[Phi2bar[jj],mu] Phi2[jj])*(Phi2bar[kk] DC[Phi2[kk],mu] - DC[Phi2bar[ll],mu] Phi2[ll])
+    ];
+    
+Ophidpar1122:= Block[{ii,jj,mu},
+      del[Phi1bar[ii]Phi1[ii],mu]del[Phi2bar[jj] Phi2[jj],mu]
+    ];
+OphiD1122:= Block[{mu, ii, jj, kk, ll},
+                (Phi1bar[ii] DC[Phi1[ii],mu] - DC[Phi1bar[jj],mu] Phi1[jj])*(Phi2bar[kk] DC[Phi2[kk],mu] - DC[Phi2bar[ll],mu] Phi2[ll])
+    ];
+    
+Ophidpar2112:= Block[{ii,jj,mu},
+      del[Phi2bar[ii]Phi1[ii],mu]del[Phi1bar[jj] Phi2[jj],mu]
+    ];
+OphiD2112:= Block[{mu, ii, jj, kk, ll},
+                (Phi2bar[ii] DC[Phi1[ii],mu] - DC[Phi2bar[jj],mu] Phi1[jj])*(Phi1bar[kk] DC[Phi2[kk],mu] - DC[Phi1bar[ll],mu] Phi2[ll])
+    ];
+    
+ (*** non-Hermitian ***)
+ 
+Ophidpar2121:= Block[{ii,jj,mu},
+      del[Phi2bar[ii]Phi1[ii],mu]del[Phi2bar[jj] Phi1[jj],mu]
+    ];
+OphiD2121:= Block[{mu, ii, jj, kk, ll},
+                (Phi2bar[ii] DC[Phi1[ii],mu] - DC[Phi2bar[jj],mu] Phi1[jj])*(Phi2bar[kk] DC[Phi1[kk],mu] - DC[Phi2bar[ll],mu] Phi1[ll])
+    ];
+    
+Ophidpar2111:= Block[{ii,jj,mu},
+      del[Phi2bar[ii]Phi1[ii],mu]del[Phi1bar[jj] Phi1[jj],mu]
+    ];
+OphiD2111:= Block[{mu, ii, jj, kk, ll},
+                (Phi2bar[ii] DC[Phi1[ii],mu] - DC[Phi2bar[jj],mu] Phi1[jj])*(Phi1bar[kk] DC[Phi1[kk],mu] - DC[Phi1bar[ll],mu] Phi1[ll])
+    ];
+    
+Ophidpar2122:= Block[{ii,jj,mu},
+      del[Phi2bar[ii]Phi1[ii],mu]del[Phi2bar[jj] Phi2[jj],mu]
+    ];
+OphiD2122:= Block[{mu, ii, jj, kk, ll},
+                (Phi2bar[ii] DC[Phi1[ii],mu] - DC[Phi2bar[jj],mu] Phi1[jj])*(Phi2bar[kk] DC[Phi2[kk],mu] - DC[Phi2bar[ll],mu] Phi2[ll])
+    ];
+ 
+
+(*** class X^2 phi^2 ***)
+
+OphiG11:= Block[{mu,nu,ii,aa},
+		Phi1bar[ii] Phi1[ii] FS[Gl,mu,nu,aa] FS[Gl,mu,nu,aa]
+      ];
+OphiG22:= Block[{mu,nu,ii,aa},
+        Phi2bar[ii] Phi2[ii] FS[Gl,mu,nu,aa] FS[Gl,mu,nu,aa]
+      ];
+OphiGtil11:= Block[{mu,nu,ro,sig,ii,aa},
+        Phi1bar[ii] Phi1[ii] 1/2 Eps[mu,nu,ro,sig] FS[Gl,ro,sig,aa] FS[Gl,mu,nu,aa]
+      ];
+OphiGtil22:= Block[{mu,nu,ro,sig,ii,aa},
+        Phi2bar[ii] Phi2[ii] 1/2 Eps[mu,nu,ro,sig] FS[Gl,ro,sig,aa] FS[Gl,mu,nu,aa]
+      ];
+      
+OphiB11:= Block[{mu,nu,ii},
+        Phi1bar[ii] Phi1[ii] FS[B,mu,nu] FS[B,mu,nu]
+      ];
+OphiB22:= Block[{mu,nu,ii},
+        Phi2bar[ii] Phi2[ii] FS[B,mu,nu] FS[B,mu,nu]
+      ];
+OphiBtil11:= Block[{mu,nu,ro,sig,ii},
+        Phi1bar[ii] Phi1[ii] 1/2 Eps[mu,nu,ro,sig] FS[B,ro,sig] FS[B,mu,nu]
+      ];
+OphiBtil22:= Block[{mu,nu,ro,sig,ii},
+        Phi2bar[ii] Phi2[ii] 1/2 Eps[mu,nu,ro,sig] FS[B,ro,sig] FS[B,mu,nu]
+      ];
+    
+OphiW11:= Block[{mu,nu,ii,kk},
+        Phi1bar[ii] Phi1[ii] FS[Wi,mu,nu,kk] FS[Wi,mu,nu,kk]
+      ];
+OphiW22:= Block[{mu,nu,ii,kk},
+        Phi2bar[ii] Phi2[ii] FS[Wi,mu,nu,kk] FS[Wi,mu,nu,kk]
+      ];
+OphiWtil11:= Block[{mu,nu,ro,sig,ii},
+        Phi1bar[ii] Phi1[ii] 1/2 Eps[mu,nu,ro,sig] FS[Wi,ro,sig,kk] FS[Wi,mu,nu,kk]
+      ];
+OphiWtil22:= Block[{mu,nu,ro,sig,ii},
+        Phi2bar[ii] Phi2[ii] 1/2 Eps[mu,nu,ro,sig] FS[Wi,ro,sig,kk] FS[Wi,mu,nu,kk]
+      ];
+
+OphiWB11:= Block[{mu,nu,ii,jj,kk},
+        Phi1bar[ii] PauliSigma[kk,ii,jj] Phi1[jj] FS[Wi,mu,nu,kk] FS[B,mu,nu]
+      ];
+OphiWB22:= Block[{mu,nu,ii,jj,kk},
+        Phi2bar[ii] PauliSigma[kk,ii,jj] Phi2[jj] FS[Wi,mu,nu,kk] FS[B,mu,nu]
+      ];
+OphiWBtil11:= Block[{mu,nu,ro,sig,ii,jj,kk},
+        Phi1bar[ii] PauliSigma[kk,ii,jj] Phi1[jj] 1/2 Eps[mu,nu,ro,sig] FS[Wi,ro,sig,kk] FS[B,mu,nu]
+      ];
+OphiWBtil22:= Block[{mu,nu,ro,sig,ii,jj,kk},
+        Phi2bar[ii] PauliSigma[kk,ii,jj] Phi2[jj] 1/2 Eps[mu,nu,ro,sig] FS[Wi,ro,sig,kk] FS[B,mu,nu]
+      ];
+
+      
+ (*** non-Hermitian ***)
+      
+OphiG21:= Block[{mu,nu,ii,aa},
+        Phi2bar[ii] Phi1[ii] FS[Gl,mu,nu,aa] FS[Gl,mu,nu,aa]
+      ];
+OphiGtil21:= Block[{mu,nu,ro,sig,ii,aa},
+        Phi2bar[ii] Phi1[ii] 1/2 Eps[mu,nu,ro,sig] FS[Gl,ro,sig,aa] FS[Gl,mu,nu,aa]
+      ];
+      
+OphiB21:= Block[{mu,nu,ii},
+        Phi2bar[ii] Phi1[ii] FS[B,mu,nu] FS[B,mu,nu]
+      ];
+OphiBtil21:= Block[{mu,nu,ro,sig,ii},
+        Phi2bar[ii] Phi1[ii] 1/2 Eps[mu,nu,ro,sig] FS[B,ro,sig] FS[B,mu,nu]
+      ];
+
+OphiW21:= Block[{mu,nu,ii,kk},
+        Phi2bar[ii] Phi1[ii] FS[Wi,mu,nu,kk] FS[Wi,mu,nu,kk]
+      ];
+OphiWtil21:= Block[{mu,nu,ro,sig,ii},
+        Phi2bar[ii] Phi1[ii] 1/2 Eps[mu,nu,ro,sig] FS[Wi,ro,sig,kk] FS[Wi,mu,nu,kk]
+      ];
+
+OphiWB21:= Block[{mu,nu,ii,jj,kk},
+        Phi2bar[ii] PauliSigma[kk,ii,jj] Phi1[jj] FS[Wi,mu,nu,kk] FS[B,mu,nu]
+      ];
+OphiWBtil21:= Block[{mu,nu,ro,sig,ii,jj,kk},
+        Phi2bar[ii] PauliSigma[kk,ii,jj] Phi1[jj] 1/2 Eps[mu,nu,ro,sig] FS[Wi,ro,sig,kk] FS[B,mu,nu]
+      ];
+
+(*** class psi^2 phi^3 ***)
+(*** all are non-Hermitian ***)
+
+Olphi111[ff1_,ff2_]:= Block[{sp1,ii,jj},
+     LLbar[sp1,ii,ff1].lR[sp1,ff2] Phi1[ii] Phi1bar[jj] Phi1[jj]
+	];
+Olphi122[ff1_,ff2_]:= Block[{sp1,ii,jj},
+     LLbar[sp1,ii,ff1].lR[sp1,ff2] Phi1[ii] Phi2bar[jj] Phi2[jj]
+    ];
+Olphi121[ff1_,ff2_]:= Block[{sp1,ii,jj},
+     LLbar[sp1,ii,ff1].lR[sp1,ff2] Phi1[ii] Phi2bar[jj] Phi1[jj]
+    ];
+Olphi112[ff1_,ff2_]:= Block[{sp1,ii,jj},
+     LLbar[sp1,ii,ff1].lR[sp1,ff2] Phi1[ii] Phi1bar[jj] Phi2[jj]
+    ];
+Olphi211[ff1_,ff2_]:= Block[{sp1,ii,jj},
+     LLbar[sp1,ii,ff1].lR[sp1,ff2] Phi2[ii] Phi1bar[jj] Phi1[jj]
+    ];
+Olphi222[ff1_,ff2_]:= Block[{sp1,ii,jj},
+     LLbar[sp1,ii,ff1].lR[sp1,ff2] Phi2[ii] Phi2bar[jj] Phi2[jj]
+    ];
+Olphi221[ff1_,ff2_]:= Block[{sp1,ii,jj},
+     LLbar[sp1,ii,ff1].lR[sp1,ff2] Phi2[ii] Phi2bar[jj] Phi1[jj]
+    ];
+Olphi212[ff1_,ff2_]:= Block[{sp1,ii,jj},
+     LLbar[sp1,ii,ff1].lR[sp1,ff2] Phi2[ii] Phi1bar[jj] Phi2[jj]
+    ];
+
+Odphi111[ff1_,ff2_]:= Block[{sp1,ii,jj,cc},
+     QLbar[sp1,ii,ff1,cc].dR[sp1,ff2,cc] Phi1[ii] Phi1bar[jj] Phi1[jj]
+    ];
+Odphi122[ff1_,ff2_]:= Block[{sp1,ii,jj,cc},
+     QLbar[sp1,ii,ff1,cc].dR[sp1,ff2,cc] Phi1[ii] Phi2bar[jj] Phi2[jj]
+    ];
+Odphi121[ff1_,ff2_]:= Block[{sp1,ii,jj,cc},
+     QLbar[sp1,ii,ff1,cc].dR[sp1,ff2,cc] Phi1[ii] Phi2bar[jj] Phi1[jj]
+    ];
+Odphi112[ff1_,ff2_]:= Block[{sp1,ii,jj,cc},
+     QLbar[sp1,ii,ff1,cc].dR[sp1,ff2,cc] Phi1[ii] Phi1bar[jj] Phi2[jj]
+    ];
+Odphi211[ff1_,ff2_]:= Block[{sp1,ii,jj,cc},
+     QLbar[sp1,ii,ff1,cc].dR[sp1,ff2,cc] Phi2[ii] Phi1bar[jj] Phi1[jj]
+    ];
+Odphi222[ff1_,ff2_]:= Block[{sp1,ii,jj,cc},
+     QLbar[sp1,ii,ff1,cc].dR[sp1,ff2,cc] Phi2[ii] Phi2bar[jj] Phi2[jj]
+    ];
+Odphi221[ff1_,ff2_]:= Block[{sp1,ii,jj,cc},
+     QLbar[sp1,ii,ff1,cc].dR[sp1,ff2,cc] Phi2[ii] Phi2bar[jj] Phi1[jj]
+    ];
+Odphi212[ff1_,ff2_]:= Block[{sp1,ii,jj,cc},
+     QLbar[sp1,ii,ff1,cc].dR[sp1,ff2,cc] Phi2[ii] Phi1bar[jj] Phi2[jj]
+    ];
+
+Ouphi111[ff1_,ff2_]:= Block[{sp1,ii,jj,kk,cc},
+     QLbar[sp1,ii,ff1,cc].uR[sp1,ff2,cc] Eps[ii,jj] Phi1bar[jj] Phi1bar[kk] Phi1[kk]
+    ];
+Ouphi122[ff1_,ff2_]:= Block[{sp1,ii,jj,kk,cc},
+     QLbar[sp1,ii,ff1,cc].uR[sp1,ff2,cc] Eps[ii,jj] Phi1bar[jj] Phi2bar[kk] Phi2[kk]
+    ];
+Ouphi121[ff1_,ff2_]:= Block[{sp1,ii,jj,kk,cc},
+     QLbar[sp1,ii,ff1,cc].uR[sp1,ff2,cc] Eps[ii,jj] Phi1bar[jj] Phi2bar[kk] Phi1[kk]
+    ];
+Ouphi112[ff1_,ff2_]:= Block[{sp1,ii,jj,kk,cc},
+     QLbar[sp1,ii,ff1,cc].uR[sp1,ff2,cc] Eps[ii,jj] Phi1bar[jj] Phi1bar[kk] Phi2[kk]
+    ];
+Ouphi211[ff1_,ff2_]:= Block[{sp1,ii,jj,kk,cc},
+     QLbar[sp1,ii,ff1,cc].uR[sp1,ff2,cc] Eps[ii,jj] Phi2bar[jj] Phi1bar[kk] Phi1[kk]
+    ];
+Ouphi222[ff1_,ff2_]:= Block[{sp1,ii,jj,kk,cc},
+     QLbar[sp1,ii,ff1,cc].uR[sp1,ff2,cc] Eps[ii,jj] Phi2bar[jj] Phi2bar[kk] Phi2[kk]
+    ];
+Ouphi221[ff1_,ff2_]:= Block[{sp1,ii,jj,kk,cc},
+     QLbar[sp1,ii,ff1,cc].uR[sp1,ff2,cc] Eps[ii,jj] Phi2bar[jj] Phi2bar[kk] Phi1[kk]
+    ];
+Ouphi212[ff1_,ff2_]:= Block[{sp1,ii,jj,kk,cc},
+     QLbar[sp1,ii,ff1,cc].uR[sp1,ff2,cc] Eps[ii,jj] Phi2bar[jj] Phi1bar[kk] Phi2[kk]
+    ];
+    
+(*** class psi^2 X phi ***)
+(*** all are non-Hermitian ***)
+
+OlBphi1[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii},
+    LLbar[sp1,ii,ff1].lR[sp2,ff2] sigmaT[mu,nu,sp1,sp2]  Phi1[ii] FS[B,mu,nu]
+    ];
+OlBphi2[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii},
+    LLbar[sp1,ii,ff1].lR[sp2,ff2] sigmaT[mu,nu,sp1,sp2]  Phi2[ii] FS[B,mu,nu]
+    ];
+
+OlWphi1[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,jj,kk},
+	LLbar[sp1,ii,ff1].lR[sp2,ff2] sigmaT[mu,nu,sp1,sp2]  PauliSigma[kk,ii,jj] Phi1[jj] FS[Wi,mu,nu,kk]
+	];
+OlWphi2[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,jj,kk},
+    LLbar[sp1,ii,ff1].lR[sp2,ff2] sigmaT[mu,nu,sp1,sp2]  PauliSigma[kk,ii,jj] Phi2[jj] FS[Wi,mu,nu,kk]
+    ];
+    
+OdBphi1[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,cc},
+    QLbar[sp1,ii,ff1,cc].dR[sp2,ff2,cc] sigmaT[mu,nu,sp1,sp2] Phi1[ii] FS[B,mu,nu]
+    ];
+OdBphi2[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,cc},
+    QLbar[sp1,ii,ff1,cc].dR[sp2,ff2,cc] sigmaT[mu,nu,sp1,sp2] Phi2[ii] FS[B,mu,nu]
+    ];
+
+OdWphi1[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,jj,kk,cc},
+    QLbar[sp1,ii,ff1,cc].dR[sp2,ff2,cc] sigmaT[mu,nu,sp1,sp2] PauliSigma[kk,ii,jj] Phi1[jj] FS[Wi,mu,nu,kk]
+    ];
+OdWphi2[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,jj,kk,cc},
+    QLbar[sp1,ii,ff1,cc].dR[sp2,ff2,cc] sigmaT[mu,nu,sp1,sp2] PauliSigma[kk,ii,jj] Phi2[jj] FS[Wi,mu,nu,kk]
+    ];
+    
+OdGphi1[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,aa,bb,kk},
+    2 QLbar[sp1,ii,ff1,aa].dR[sp2,ff2,bb] sigmaT[mu,nu,sp1,sp2] Phi1[ii] FS[Gl,mu,nu,kk] T[kk,aa,bb]
+    ];
+OdGphi2[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,aa,bb,kk},
+    2 QLbar[sp1,ii,ff1,aa].dR[sp2,ff2,bb] sigmaT[mu,nu,sp1,sp2] Phi2[ii] FS[Gl,mu,nu,kk] T[kk,aa,bb]
+    ];
+    
+OuBphi1[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,jj,cc},
+    QLbar[sp1,ii,ff1,cc].uR[sp2,ff2,cc] sigmaT[mu,nu,sp1,sp2] Eps[ii,jj] Phi1bar[jj] FS[B,mu,nu]
+    ];
+OuBphi2[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,jj,cc},
+    QLbar[sp1,ii,ff1,cc].uR[sp2,ff2,cc] sigmaT[mu,nu,sp1,sp2] Eps[ii,jj] Phi2bar[jj] FS[B,mu,nu]
+    ];
+    
+OuWphi1[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,jj1,jj2,kk,cc},
+    QLbar[sp1,ii,ff1,cc].uR[sp2,ff2,cc] sigmaT[mu,nu,sp1,sp2]  PauliSigma[kk,ii,jj1] Eps[jj1,jj2] Phi1bar[jj2] FS[Wi,mu,nu,kk]
+    ];
+OuWphi2[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,jj1,jj2,kk,cc},
+    QLbar[sp1,ii,ff1,cc].uR[sp2,ff2,cc] sigmaT[mu,nu,sp1,sp2]  PauliSigma[kk,ii,jj1] Eps[jj1,jj2] Phi2bar[jj2] FS[Wi,mu,nu,kk]
+    ];
+    
+OuGphi1[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,jj,aa,bb,kk},
+	2 QLbar[sp1,ii,ff1,aa].uR[sp2,ff2,bb] sigmaT[mu,nu,sp1,sp2] Phi1bar[jj] FS[Gl,mu,nu,kk] T[kk,aa,bb] Eps[ii,jj]
+	];
+OuGphi2[ff1_,ff2_]:= Block[{sp1,sp2,mu,nu,ii,jj,aa,bb,kk},
+    2 QLbar[sp1,ii,ff1,aa].uR[sp2,ff2,bb] sigmaT[mu,nu,sp1,sp2] Phi2bar[jj] FS[Gl,mu,nu,kk] T[kk,aa,bb] Eps[ii,jj]
+    ];
+
+(*** class psi^2 phi^2 D ***)
+
+Ophie11[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj},
+    I*( Phi1bar[ii] DC[Phi1[ii],mu] - DC[Phi1bar[jj],mu] Phi1[jj] )*lRbar[sp1,ff1].lR[sp2,ff2] Ga[mu,sp1,sp2]
+    ];
+Ophie22[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj},
+    I*( Phi2bar[ii] DC[Phi2[ii],mu] - DC[Phi2bar[jj],mu] Phi2[jj] )*lRbar[sp1,ff1].lR[sp2,ff2] Ga[mu,sp1,sp2]
+    ];
+Ophil111[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,kk},
+    I*( Phi1bar[ii] DC[Phi1[ii],mu] - DC[Phi1bar[jj],mu] Phi1[jj] )*LLbar[sp1,kk,ff1].LL[sp2,kk,ff2] Ga[mu,sp1,sp2]
+	];
+Ophil221[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,kk},
+    I*( Phi2bar[ii] DC[Phi2[ii],mu] - DC[Phi2bar[jj],mu] Phi2[jj] )*LLbar[sp1,kk,ff1].LL[sp2,kk,ff2] Ga[mu,sp1,sp2]
+    ];
+(* For increased computation efficiency, we used sigma[a, i j] sigma [a, k l] = 2 delta[i l] delta [j k] - delta[i j] delta [k l] from SU2 algebra *)
+
+Ophil113[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,kk,ll},
+        I*(Phi1bar[ii] DC[Phi1[jj], mu] - DC[Phi1bar[ii], mu] Phi1[jj])*( 2 IndexDelta[Index[SU2D, ii], Index[SU2D, ll]]*IndexDelta[Index[SU2D, jj], Index[SU2D, kk]] - IndexDelta[Index[SU2D, ii], Index[SU2D, jj]]*IndexDelta[Index[SU2D, kk], Index[SU2D, ll]] )*LLbar[sp1,kk,ff1].LL[sp2,ll,ff2] Ga[mu,sp1,sp2]
+	];
+Ophil223[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,kk,ll},
+        I*(Phi2bar[ii] DC[Phi2[jj], mu] - DC[Phi2bar[ii], mu] Phi2[jj])*( 2 IndexDelta[Index[SU2D, ii], Index[SU2D, ll]]*IndexDelta[Index[SU2D, jj], Index[SU2D, kk]] - IndexDelta[Index[SU2D, ii], Index[SU2D, jj]]*IndexDelta[Index[SU2D, kk], Index[SU2D, ll]] )*LLbar[sp1,kk,ff1].LL[sp2,ll,ff2] Ga[mu,sp1,sp2]
+    ];
+    
+Ophid11[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,cc},
+    I*( Phi1bar[ii] DC[Phi1[ii],mu] - DC[Phi1bar[jj],mu] Phi1[jj] )*dRbar[sp1,ff1,cc].dR[sp2,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophid22[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,cc},
+    I*( Phi2bar[ii] DC[Phi2[ii],mu] - DC[Phi2bar[jj],mu] Phi2[jj] )*dRbar[sp1,ff1,cc].dR[sp2,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophiu11[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,cc},
+    I*( Phi1bar[ii] DC[Phi1[ii],mu] - DC[Phi1bar[jj],mu] Phi1[jj] )*uRbar[sp1,ff1,cc].uR[sp2,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophiu22[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,cc},
+    I*( Phi2bar[ii] DC[Phi2[ii],mu] - DC[Phi2bar[jj],mu] Phi2[jj] )*uRbar[sp1,ff1,cc].uR[sp2,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophiq111[ff1_,ff2_]:= Block[{sp1,sp2,mu,ii,jj,kk,cc},
+    I*( Phi1bar[ii] DC[Phi1[ii],mu] - DC[Phi1bar[jj],mu] Phi1[jj] )*QLbar[sp1,kk,ff1,cc].QL[sp2,kk,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophiq221[ff1_,ff2_]:= Block[{sp1,sp2,mu,ii,jj,kk,cc},
+    I*( Phi2bar[ii] DC[Phi2[ii],mu] - DC[Phi2bar[jj],mu] Phi2[jj] )*QLbar[sp1,kk,ff1,cc].QL[sp2,kk,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophiq113[ff1_,ff2_]:= Block[{sp1,sp2,mu,ii,jj,kk,ll,cc},
+        I*(Phi1bar[ii] DC[Phi1[jj], mu] - DC[Phi1bar[ii], mu] Phi1[jj])*( 2 IndexDelta[Index[SU2D, ii], Index[SU2D, ll]]*IndexDelta[Index[SU2D, jj], Index[SU2D, kk]] - IndexDelta[Index[SU2D, ii], Index[SU2D, jj]]*IndexDelta[Index[SU2D, kk], Index[SU2D, ll]] )*QLbar[sp1,kk,ff1,cc].QL[sp2,ll,ff2,cc] Ga[mu,sp1,sp2]
+     ];
+Ophiq223[ff1_,ff2_]:= Block[{sp1,sp2,mu,ii,jj,kk,cc},
+        I*(Phi2bar[ii] DC[Phi2[jj], mu] - DC[Phi2bar[ii], mu] Phi2[jj])*( 2 IndexDelta[Index[SU2D, ii], Index[SU2D, ll]]*IndexDelta[Index[SU2D, jj], Index[SU2D, kk]] - IndexDelta[Index[SU2D, ii], Index[SU2D, jj]]*IndexDelta[Index[SU2D, kk], Index[SU2D, ll]] )*QLbar[sp1,kk,ff1,cc].QL[sp2,ll,ff2,cc] Ga[mu,sp1,sp2]
+     ];
+ 
+ (*** non-Hermitian ***)
+ 
+Ophie12[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj},
+    I*( Phi1bar[ii] DC[Phi2[ii],mu] - DC[Phi1bar[jj],mu] Phi2[jj] )*lRbar[sp1,ff1].lR[sp2,ff2] Ga[mu,sp1,sp2]
+    ];
+Ophil121[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,kk},
+    I*( Phi1bar[ii] DC[Phi2[ii],mu] - DC[Phi1bar[jj],mu] Phi2[jj] )*LLbar[sp1,kk,ff1].LL[sp2,kk,ff2] Ga[mu,sp1,sp2]
+    ];
+    
+
+Ophil123[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,kk,ll},
+        I*(Phi1bar[ii] DC[Phi2[jj], mu] - DC[Phi1bar[ii], mu] Phi2[jj])*( 2 IndexDelta[Index[SU2D, ii], Index[SU2D, ll]]*IndexDelta[Index[SU2D, jj], Index[SU2D, kk]] - IndexDelta[Index[SU2D, ii], Index[SU2D, jj]]*IndexDelta[Index[SU2D, kk], Index[SU2D, ll]] )*LLbar[sp1,kk,ff1].LL[sp2,ll,ff2] Ga[mu,sp1,sp2]
+    ];
+    
+Ophid12[ff1_,ff2_]:= Block[{mu,sp1,sp2,cc},
+    I*( Phi1bar[ii] DC[Phi2[ii],mu] - DC[Phi1bar[jj],mu] Phi2[jj] )*dRbar[sp1,ff1,cc].dR[sp2,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophiu12[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,cc},
+    I*( Phi1bar[ii] DC[Phi2[ii],mu] - DC[Phi1bar[jj],mu] Phi2[jj] )*uRbar[sp1,ff1,cc].uR[sp2,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophiud11[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,cc},
+    I Eps[jj,ii] Phi1[jj] DC[Phi1[ii],mu] uRbar[sp1,ff1,cc].dR[sp2,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophiud22[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,cc},
+    I Eps[jj,ii] Phi2[jj] DC[Phi2[ii],mu] uRbar[sp1,ff1,cc].dR[sp2,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophiud21[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,cc},
+    I Eps[jj,ii] (Phi2[jj] DC[Phi1[ii],mu] - DC[Phi2[jj],mu] Phi1[ii]) uRbar[sp1,ff1,cc].dR[sp2,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophiq121[ff1_,ff2_]:= Block[{sp1,sp2,mu,ii,jj,kk,cc},
+    I*( Phi1bar[ii] DC[Phi2[ii],mu] - DC[Phi1bar[jj],mu] Phi2[jj] )*QLbar[sp1,kk,ff1,cc].QL[sp2,kk,ff2,cc] Ga[mu,sp1,sp2]
+    ];
+Ophiq123[ff1_,ff2_]:= Block[{mu,sp1,sp2,ii,jj,kk,ll,cc},
+        I*(Phi1bar[ii] DC[Phi2[jj], mu] - DC[Phi1bar[ii], mu] Phi2[jj])*( 2 IndexDelta[Index[SU2D, ii], Index[SU2D, ll]]*IndexDelta[Index[SU2D, jj], Index[SU2D, kk]] - IndexDelta[Index[SU2D, ii], Index[SU2D, jj]]*IndexDelta[Index[SU2D, kk], Index[SU2D, ll]] )*QLbar[sp1,kk,ff1,cc].QL[sp2,ll,ff2,cc] Ga[mu,sp1,sp2]
+     ];
+
+(*** class psi^4 ***)
+
+Oll[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,ii,jj},
+	LLbar[sp1,ii,ff1].LL[sp2,ii,ff2] Ga[mu,sp1,sp2]
+	LLbar[sp3,jj,ff3].LL[sp4,jj,ff4] Ga[mu,sp3,sp4]
+	];
+Olq1[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,ii,jj,cc},
+	LLbar[sp1,ii,ff1].LL[sp2,ii,ff2] Ga[mu,sp1,sp2]
+	QLbar[sp3,jj,ff3,cc].QL[sp4,jj,ff4,cc] Ga[mu,sp3,sp4]
+	];
+Olq3[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,cc,ii1,jj1,ii2,jj2,kk},
+	LLbar[sp1,ii1,ff1].LL[sp2,jj1,ff2] Ga[mu,sp1,sp2]
+	QLbar[sp3,ii2,ff3,cc].QL[sp4,jj2,ff4,cc] Ga[mu,sp3,sp4]
+	PauliSigma[kk,ii1,jj1] PauliSigma[kk,ii2,jj2]
+	];
+Oqq1[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,ii,jj,cc1,cc2},
+	QLbar[sp1,ii,ff1,cc1].QL[sp2,ii,ff2,cc1] Ga[mu,sp1,sp2]
+	QLbar[sp3,jj,ff3,cc2].QL[sp4,jj,ff4,cc2] Ga[mu,sp3,sp4]
+	];
+Oqq3[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,cc1,cc2,ii1,jj1,ii2,jj2,kk},
+	QLbar[sp1,ii1,ff1,cc1].QL[sp2,jj1,ff2,cc1] Ga[mu,sp1,sp2]
+	QLbar[sp3,ii2,ff3,cc2].QL[sp4,jj2,ff4,cc2] Ga[mu,sp3,sp4]
+	PauliSigma[kk,ii1,jj1] PauliSigma[kk,ii2,jj2]
+	];
+
+Oee[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4},
+	 lRbar[sp1,ff1].lR[sp2,ff2] Ga[mu,sp1,sp2]
+	 lRbar[sp3,ff3].lR[sp4,ff4] Ga[mu,sp3,sp4]
+	];
+
+Ouu[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,cc1,cc2},
+	 uRbar[sp1,ff1,cc1].uR[sp2,ff2,cc1] Ga[mu,sp1,sp2]
+	 uRbar[sp3,ff3,cc2].uR[sp4,ff4,cc2] Ga[mu,sp3,sp4]
+	];
+
+Odd[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,cc1,cc2},
+	 dRbar[sp1,ff1,cc1].dR[sp2,ff2,cc1] Ga[mu,sp1,sp2]
+	 dRbar[sp3,ff3,cc2].dR[sp4,ff4,cc2] Ga[mu,sp3,sp4]
+	];
+
+Oeu[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,cc},
+	 lRbar[sp1,ff1].lR[sp2,ff2] Ga[mu,sp1,sp2]
+	 uRbar[sp3,ff3,cc].uR[sp4,ff4,cc] Ga[mu,sp3,sp4]
+	];
+
+Oed[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,cc},
+	 lRbar[sp1,ff1].lR[sp2,ff2] Ga[mu,sp1,sp2]
+	 dRbar[sp3,ff3,cc].dR[sp4,ff4,cc] Ga[mu,sp3,sp4]
+	];
+
+Oud1[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,cc1,cc2},
+	 uRbar[sp1,ff1,cc1].uR[sp2,ff2,cc1] Ga[mu,sp1,sp2]
+	 dRbar[sp3,ff3,cc2].dR[sp4,ff4,cc2] Ga[mu,sp3,sp4]
+	];
+
+Oud8[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,cc1,cc2,cc3,cc4,aa},
+	 uRbar[sp1,ff1,cc1].uR[sp2,ff2,cc2] Ga[mu,sp1,sp2]
+	 dRbar[sp3,ff3,cc3].dR[sp4,ff4,cc4] Ga[mu,sp3,sp4]
+	 T[aa,cc1,cc2] T[aa,cc3,cc4]
+	];
+
+Ole[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,ii},
+	LLbar[sp1,ii,ff1].LL[sp2,ii,ff2] Ga[mu,sp1,sp2]
+	lRbar[sp3,ff3].lR[sp4,ff4] Ga[mu,sp3,sp4]
+	];
+
+Olu[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,ii,cc},
+	LLbar[sp1,ii,ff1].LL[sp2,ii,ff2] Ga[mu,sp1,sp2]
+	uRbar[sp3,ff3,cc].uR[sp4,ff4,cc] Ga[mu,sp3,sp4]
+	];
+
+Old[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,ii,cc},
+	LLbar[sp1,ii,ff1].LL[sp2,ii,ff2] Ga[mu,sp1,sp2]
+	dRbar[sp3,ff3,cc].dR[sp4,ff4,cc] Ga[mu,sp3,sp4]
+	];
+
+Oqe[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,ii,cc},
+	QLbar[sp1,ii,ff1,cc].QL[sp2,ii,ff2,cc] Ga[mu,sp1,sp2]
+	lRbar[sp3,ff3].lR[sp4,ff4] Ga[mu,sp3,sp4]
+	];
+
+Oqu1[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,ii,cc1,cc2},
+	QLbar[sp1,ii,ff1,cc1].QL[sp2,ii,ff2,cc1] Ga[mu,sp1,sp2]
+	uRbar[sp3,ff3,cc2].uR[sp4,ff4,cc2] Ga[mu,sp3,sp4]
+	];
+
+Oqu8[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,ii,cc1,cc2,cc3,cc4,aa},
+	QLbar[sp1,ii,ff1,cc1].QL[sp2,ii,ff2,cc2] Ga[mu,sp1,sp2]
+	uRbar[sp3,ff3,cc3].uR[sp4,ff4,cc4] Ga[mu,sp3,sp4]
+	T[aa,cc1,cc2] T[aa,cc3,cc4]
+	];
+
+Oqd1[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,ii,cc1,cc2},
+	QLbar[sp1,ii,ff1,cc1].QL[sp2,ii,ff2,cc1] Ga[mu,sp1,sp2]
+	dRbar[sp3,ff3,cc2].dR[sp4,ff4,cc2] Ga[mu,sp3,sp4]
+	];
+
+Oqd8[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,sp1,sp2,sp3,sp4,ii,cc1,cc2,cc3,cc4,aa},
+	QLbar[sp1,ii,ff1,cc1].QL[sp2,ii,ff2,cc2] Ga[mu,sp1,sp2]
+	dRbar[sp3,ff3,cc3].dR[sp4,ff4,cc4] Ga[mu,sp3,sp4]
+	T[aa,cc1,cc2] T[aa,cc3,cc4]
+	];
+ 
+ (*** non-Hermitian ***)
+
+Oledq[ff1_,ff2_,ff3_,ff4_]:= Block[{sp1,sp2,ii,cc},
+	LLbar[sp1,ii,ff1].lR[sp1,ff2]
+	dRbar[sp2,ff3,cc].QL[sp2,ii,ff4,cc]
+	];
+
+Oquqd1[ff1_,ff2_,ff3_,ff4_]:= Block[{sp1,sp2,cc1,cc2,ii,jj},
+	QLbar[sp1,ii,ff1,cc1].uR[sp1,ff2,cc1] Eps[ii,jj]
+	QLbar[sp2,jj,ff3,cc2].dR[sp2,ff4,cc2]
+	];
+
+Oquqd8[ff1_,ff2_,ff3_,ff4_]:= Block[{sp1,sp2,cc1,cc2,cc3,cc4,aa,ii,jj},
+	4 QLbar[sp1,ii,ff1,cc1].uR[sp1,ff2,cc2] Eps[ii,jj]
+	QLbar[sp2,jj,ff3,cc3].dR[sp2,ff4,cc4]
+    T[aa,cc1,cc2] T[aa,cc3,cc4]
+	];
+
+Olequ1[ff1_,ff2_,ff3_,ff4_]:= Block[{sp1,sp2,cc,ii,jj},
+	LLbar[sp1,ii,ff1].lR[sp1,ff2] Eps[ii,jj]
+	QLbar[sp2,jj,ff3,cc].uR[sp2,ff4,cc]
+	];
+
+Olequ3[ff1_,ff2_,ff3_,ff4_]:= Block[{mu,nu,sp1,sp2,sp3,sp4,ii,jj,cc},
+	LLbar[sp1,ii,ff1].lR[sp2,ff2]  Eps[ii,jj]
+	QLbar[sp3,jj,ff3,cc].uR[sp4,ff4,cc]
+	sigmaT[mu,nu,sp1,sp2] sigmaT[mu,nu,sp3,sp4]
+	];
+ 
+ (*** B L violating operators ***)
+
+Oduq[ff1_,ff2_,ff3_,ff4_] := Block[{sp1,sp2,sp3,sp4,aa,bb,cc,jj,kk},
+            Eps[aa,bb,cc] Eps[jj,kk] HC[CC[dR][sp1,ff1,aa]].Ga[0,sp1,sp2].uR[sp2,ff2,bb]
+            HC[CC[QL][sp3,jj,ff3,cc]].Ga[0,sp3,sp4].LL[sp4,kk,ff4]
+            ];
+ 
+Oqqu[ff1_,ff2_,ff3_,ff4_] := Block[{sp1,sp2,sp3,sp4,aa,bb,cc,jj,kk},
+            Eps[aa,bb,cc] Eps[jj,kk] HC[CC[QL][sp1,jj,ff1,aa]].Ga[0,sp1,sp2].QL[sp2,kk,ff2,bb]
+            HC[CC[uR][sp3,ff3,cc]].Ga[0,sp3,sp4].lR[sp4,ff4]
+ ];
+
+Oqqq[ff1_,ff2_,ff3_,ff4_] := Block[{sp1,sp2,sp3,sp4,aa,bb,cc,jj,kk,mm,nn},
+            Eps[aa,bb,cc] Eps[jj,nn] Eps[kk,mm] HC[CC[QL][sp1,jj,ff1,aa]].Ga[0,sp1,sp2].QL[sp2,kk,ff2,bb]
+            HC[CC[QL][sp3,mm,ff3,cc]].Ga[0,sp3,sp4].LL[sp4,nn,ff4]
+];
+
+Oduu[ff1_,ff2_,ff3_,ff4_] := Block[{sp1,sp2,sp3,sp4,aa,bb,cc},
+            Eps[aa,bb,cc] HC[CC[dR][sp1,ff1,aa]].Ga[0,sp1,sp2].uR[sp2,ff2,bb]
+            HC[CC[uR][sp3,ff3,cc]].Ga[0,sp3,sp4].lR[sp4,ff4]
+];

@@ -1,0 +1,191 @@
+(* Calculates Feynman rules for lepton interactions while applying appropriate reduction rules *)
+(* Assumes neutrino is a Majorana field *)
+
+
+GenerateLeptonVertices = Function[{},
+    
+    D4VertexSet1Leptons = Simplify[ SymmetrizeNeutrino2Current[ FeynmanRules[(LFermions + LYukawa) /. uq[___] -> 0 /. dq[___] -> 0] ] ];
+    
+    
+    EFTVertexSet1 = Simplify[ SymmetrizeNeutrino2Current[ FeynmanRules[L5vvphi] ] ] /. Rulesym1 /. Rulesym2a /. Rulesym2b;
+    
+    Do[ If[EFTVertexSet1[[ii, 1, 1, 1]] == vlbar && EFTVertexSet1[[ii, 1, 2, 1]] == l,
+    
+        EFTVertexSet1[[ii]] = EFTVertexSet1[[ii]] /. {Conjugate[Upmns[Index[Generation,Ext[1]],Index[Generation,Generation$1]]] -> Conjugate[Upmns[Index[Generation,Ext[2]],Index[Generation,Generation$1]]]};
+        ], {ii, 1, Length[EFTVertexSet1]}];
+        
+    EFTVertexSet6Leptons = FeynmanRules[L6psi2phi3 /. uq[___] -> 0 /. dq[___] -> 0];
+
+    EFTVertexSet7Leptons = FeynmanRules[L6psi2Xphi /. uq[___] -> 0 /. dq[___] -> 0] /. Rule2hdmType;
+    
+    EFTVertexSet8Leptons = Simplify[ SymmetrizeNeutrino2Current[ FeynmanRules[L6psi2phi2D /. uq[___] -> 0 /. dq[___] -> 0] ] ] /. Rule2hdmType;
+
+    GoldstoneLeptonVertices = GoldstoneCouplings[MergeVertices[D4VertexSet1Leptons, EFTVertexSet1, EFTVertexSet6Leptons]] /. Rule2hdmType;
+
+    LeptonVertices = MergeVertices[ GoldstoneLeptonVertices(*, EFTVertexSet7Leptons, EFTVertexSet8Leptons *)];
+     
+    (* Lepton pure scalar vertices *)
+    
+    LeptonScalarVertices = {};
+    LeptonGaugeScalarVertices = {};
+    
+    For[i = 1, i <= Length[LeptonVertices], i++,
+      If[ FreeQ[LeptonVertices[[i, 1]], A] == True &&
+          FreeQ[LeptonVertices[[i, 1]], Z] == True &&
+          FreeQ[LeptonVertices[[i, 1]], W] == True &&
+          FreeQ[LeptonVertices[[i, 1]], Wbar] == True,
+          
+                AppendTo[LeptonScalarVertices, LeptonVertices[[i]]];
+    ];
+  ];
+  
+ 
+    (* Lepton gauge and scalar vertices *)
+    
+    LeptonGaugeScalarVertices = DeleteCases[LeptonVertices, Alternatives @@ LeptonScalarVertices];
+    
+    (* Expansion procedure; keep up to order 1/\[CapitalLambda]^2 in EFT expansion *)
+    
+    LeptonScalarVertices = Simplify[Series[ LeptonScalarVertices /. eta->0, {LambdaCutoff, \[Infinity], 2}], Trig -> False] // Normal // ReleaseHold;
+    LeptonGaugeScalarVertices = Simplify[Series[ LeptonGaugeScalarVertices /. eta ->0, {LambdaCutoff, \[Infinity], 2}], Trig -> False] // Normal // ReleaseHold;
+    
+];
+
+(* Calculates Feynman rules for quark interactions while applying appropriate reduction rules *)
+
+GenerateQuarkVertices = Function[{},
+
+    D4VertexSet1Quarks  = FeynmanRules[(LFermions + LYukawa) /. vl[___] -> 0 /.  l[___] -> 0];
+
+    EFTVertexSet6Quarks = FeynmanRules[L6psi2phi3 /. vl[___] -> 0 /. l[___] -> 0];
+
+    EFTVertexSet7Quarks = FeynmanRules[L6psi2Xphi /. vl[___] -> 0 /. l[___] -> 0] /. Rule2hdmType;
+
+    EFTVertexSet8Quarks = FeynmanRules[L6psi2phi2D /. vl[___] -> 0 /. l[___] -> 0] /. Rulesym1 /. Rule2hdmType;
+
+    GoldstoneQuarkVertices = GoldstoneCouplings[MergeVertices[D4VertexSet1Quarks, EFTVertexSet6Quarks]] /. Rule2hdmType;
+
+    QuarkVertices = MergeVertices[ GoldstoneQuarkVertices, EFTVertexSet7Quarks, EFTVertexSet8Quarks ];
+    
+    (* Quark pure scalar vertices *)
+
+    QuarkScalarVertices = {};
+    QuarkGaugeScalarVertices = {};
+  
+    For[i = 1, i <= Length[QuarkVertices], i++,
+      If[ FreeQ[QuarkVertices[[i, 1]], G] == True &&
+          FreeQ[QuarkVertices[[i, 1]], A] == True &&
+          FreeQ[QuarkVertices[[i, 1]], Z] == True &&
+          FreeQ[QuarkVertices[[i, 1]], W] == True &&
+          FreeQ[QuarkVertices[[i, 1]], Wbar] == True,
+          
+                AppendTo[QuarkScalarVertices, QuarkVertices[[i]]];
+    ];
+  ];
+  
+    (* Quark gauge and scalar vertices *)
+
+    QuarkGaugeScalarVertices = DeleteCases[QuarkVertices, Alternatives @@ QuarkScalarVertices];
+      
+    (* Expansion procedure; keep up to order 1/\[CapitalLambda]^2 in EFT expansion *)
+
+    QuarkScalarVertices = Simplify[Series[ QuarkScalarVertices, {LambdaCutoff, \[Infinity], 2}], Trig -> False] // Normal // ReleaseHold;
+    QuarkGaugeScalarVertices = Simplify[Series[ QuarkGaugeScalarVertices, {LambdaCutoff, \[Infinity], 2}], Trig -> False] // Normal // ReleaseHold;
+
+];
+
+(* Calculates Feynman rules for four-fermion interactions while applying appropriate reduction rules *)
+
+GenerateFourFermionVertices = Function[{},
+
+    FourFermionVertices = EFTVertexSet9 /. Rule2hdmType;
+    
+    (* Expansion procedure; keep up to order 1/\[CapitalLambda]^2 in EFT expansion *)
+
+    FourFermionVertices = Simplify[Series[ FourFermionVertices, {LambdaCutoff, \[Infinity], 2}] ] // Normal // ReleaseHold;
+    
+];
+
+(* Calculates Feynman rules for bosonic interactions while applying appropriate reduction rules *)
+    
+GenerateBosonVertices = Function[{},
+    
+    (* Pure Bosonic vertices *)
+
+    D4VertexSet2 = FeynmanRules[LGauge] /. Rule2hdmType;
+    D4VertexSet3 = FeynmanRules[LHiggs] /. RuleCP /. Rule2hdmType;
+    
+    EFTVertexSet2 = FeynmanRules[L6X3] /. Rule2hdmType;
+    EFTVertexSet3 = FeynmanRules[L6phi6] /. RuleCP /. Rule2hdmType;
+    EFTVertexSet4 = FeynmanRules[L6phi4D2] /. RuleCP /. Rule2hdmType;
+    EFTVertexSet5 = FeynmanRules[L6X2phi2] /. RuleCP /. Rule2hdmType;
+        
+    ScalarGaugeVertices = MergeVertices[D4VertexSet3, EFTVertexSet4, EFTVertexSet5];
+    
+    (* Pure scalar processes *)
+
+    ScalarVerticesp = {};
+    GaugeVerticesp = {};
+    
+    For[i = 1, i <= Length[ScalarGaugeVertices], i++,
+      If[ FreeQ[ScalarGaugeVertices[[i, 1]], G] == True &&
+          FreeQ[ScalarGaugeVertices[[i, 1]], A] == True &&
+          FreeQ[ScalarGaugeVertices[[i, 1]], Z] == True &&
+          FreeQ[ScalarGaugeVertices[[i, 1]], W] == True &&
+          FreeQ[ScalarGaugeVertices[[i, 1]], Wbar] == True,
+          
+                AppendTo[ScalarVerticesp, ScalarGaugeVertices[[i]]];
+    ];
+  ];
+  
+    ScalarVertices = MergeVertices[ScalarVerticesp, EFTVertexSet3];
+    
+    (* Pure gauge processes *)
+    
+    GaugeVerticesp = DeleteCases[ScalarGaugeVertices, Alternatives @@ ScalarVerticesp];
+    GaugeVertices = MergeVertices[GaugeVerticesp, D4VertexSet2, EFTVertexSet2];
+    
+    (* Mixed scalar and gauge processes *)
+
+    ScalarGaugeVertices = DeleteCases[ ScalarGaugeVertices, Alternatives @@ MergeVertices[ScalarVerticesp, GaugeVerticesp] ];
+    
+    (* Expansion procedure; keep up to order 1/\[CapitalLambda]^2 in EFT expansion *)
+    
+    ScalarVertices = Simplify[Series[ ScalarVertices, {LambdaCutoff, \[Infinity], 2}], Trig -> False] // Normal // ReleaseHold;
+    GaugeVertices = Simplify[Series[ GaugeVertices , {LambdaCutoff, \[Infinity], 2}], Trig -> False] // Normal // ReleaseHold;
+    ScalarGaugeVertices = Simplify[Series[ ScalarGaugeVertices , {LambdaCutoff, \[Infinity], 2}], Trig -> False] // Normal // ReleaseHold;
+        
+];
+
+UFO2HDMEFT = Function[{},
+
+(* Renormalizable 2HDM *)
+
+    WriteUFO [ L42HDM // ReleaseHold ];
+
+(*
+    WriteUFO [ LYukawa // ReleaseHold ];
+    WriteUFO [ LFermions // ReleaseHold ];
+    WriteUFO [ LHiggs // ReleaseHold ];
+    WriteUFO [ LGauge // ReleaseHold ];
+*)
+
+(* Effective Lagrangain up to d = 6 *)
+(* The user can uncomment the individual operators if interested *)
+
+    WriteUFO [ L2HDMEFT // ReleaseHold ];
+    
+(*
+    WriteUFO [ L5vvphi // ReleaseHold ];
+    WriteUFO [ L6X3 // ReleaseHold ];
+    WriteUFO [ L6phi6 // ReleaseHold ];
+    WriteUFO [ L6phi4D2 // ReleaseHold ];
+    WriteUFO [ L6X2phi2 // ReleaseHold ];
+    WriteUFO [ L6psi2phi3 // ReleaseHold ];
+    WriteUFO [ L6psi2Xphi // ReleaseHold ];
+    WriteUFO [ L6psi2phi2D // ReleaseHold ];
+    WriteUFO [ L6psi4 // ReleaseHold s];
+*)
+
+];
+

@@ -1,0 +1,157 @@
+(***************************************************************************************************************)
+(******                       This is the FeynRules mod-file for the 2HDM Effective Field Theory          ******)
+(******                                                                                                   ******)
+(******                               Authors: Radovan Dermisek and Keith Hermanek                        ******)
+(******                                                                                                   ******)
+(******                               Please refer to "readme.txt" for more details                       ******)
+(******                                                                                                   ******)
+(***************************************************************************************************************)
+
+M$ModelName = "2HDMEFT";
+   
+M$Information = {Authors -> {"Radovan Dermisek", "Keith Hermanek"},
+             Version -> "1.0",
+             Date -> "",
+             Institutions -> {"Indiana University", "Department of Physics"},
+             URLs  -> "",
+             Emails -> {"dermisek@iu.edu", "khermane@iu.edu"},
+             References -> "Phys. Rev. D 110, 035026 (2024) [arXiv:2405.20511 [hep-ph]], [arXiv:2411.07337 [hep-ph]]"
+             }
+
+FR$DSign = -1;
+
+FeynmanGauge = True;
+
+(******* Index definitions ********)
+
+IndexRange[Index[SU2W      ]] = Unfold[Range[3]]; 
+IndexRange[Index[SU2D      ]] = Unfold[Range[2]];
+IndexRange[Index[Gluon     ]] = NoUnfold[Range[8]];
+IndexRange[Index[Colour    ]] = NoUnfold[Range[3]]; 
+IndexRange[Index[Generation]] = Range[3];
+IndexRange[Index[Higgs     ]] = Unfold[Range[3]];
+
+
+IndexStyle[SU2W,       j];
+IndexStyle[SU2D,       k];
+IndexStyle[Gluon,      a];
+IndexStyle[Colour,     m];
+IndexStyle[Generation, f];
+IndexStyle[Higgs,      j];
+
+
+(* ************************** *)
+(* *** Interaction orders *** *)
+(* ***  (as used by mg5)  *** *)
+(* ************************** *)
+
+M$InteractionOrderHierarchy = {
+  {NP, 1},
+  {QCD, 1},
+  {QED, 2}
+};
+
+
+
+(* ************************** *)
+(* *****      vevs      ***** *)
+(* ************************** *)
+M$vevs = { {vev Cos[beta],vev Sin[beta]} };
+
+
+(************** Gauge Groups ******************)
+
+M$GaugeGroups = {
+  U1Y  == { 
+    Abelian          -> True,  
+    CouplingConstant -> g1,
+    GaugeBoson       -> B,
+    Charge           -> Y
+  },
+  SU2L == { 
+    Abelian           -> False, 
+    CouplingConstant  -> gw,
+    GaugeBoson        -> Wi,
+    StructureConstant -> Eps, 
+    Representations   -> {Ta,SU2D}, 
+    Definitions       -> {Ta[a_,b_,c_]->PauliSigma[a,b,c]/2, FSU2L[i_,j_,k_]:> I Eps[i,j,k]}
+  },
+  SU3C == { 
+    Abelian           -> False, 
+    CouplingConstant  -> gs, 
+    GaugeBoson        -> Gl,
+    StructureConstant -> f,
+    Representations   -> {T,Colour}, 
+    SymmetricTensor   -> dSUN
+  } 
+};
+
+(************** Import files ******************)
+
+Get["2HDMEFT_fields.fr"]
+
+Get["2HDMEFT_parameters.fr"]
+
+Get["2HDMEFT_operators.fr"]
+
+Get["2HDMEFT_rules_functions.fr"]
+
+Get["2HDMEFT_Lagrangian.fr"]
+
+Get["2HDMEFT_vertex_calculation.fr"]
+
+(************** Model-specific keys ******************)
+
+FeynmanGaugeRule = If[Not[FeynmanGauge], {G0|GP|GPbar -> 0}, {}];
+
+(* Please specify the type of 2HDM: "General", "I", "II", "X", "Y" *)
+ModelKey = "II";
+
+If[ ModelKey == "General",
+    Rule2hdmType = {};
+];
+
+If[ ModelKey == "I",
+    Rule2hdmType = Rule2hdmTypeI;
+    RuleMe = RuleMeI;
+ ];
+ 
+If[ ModelKey == "II",
+    Rule2hdmType = Rule2hdmTypeII;
+    RuleMe = RuleMeII;
+];
+
+If[ ModelKey == "X",
+    Rule2hdmType = Rule2hdmTypeX;
+    RuleMe = RuleMeX;
+];
+
+If[ ModelKey == "Y",
+    Rule2hdmType = Rule2hdmTypeY;
+    RuleMe = RuleMeY;
+];
+
+
+(* Please specify if evaluating the alignment limit when OverHat[\[Alpha]] -> \[Beta] - \[Pi]/2: "yes' or "no" *)
+(* AlignmentLimit should be set to "no" if there's no CP conservation *)
+
+AlignmentLimit = "yes";
+
+If[ AlignmentLimit == "yes", RuleAlignLimit = RuleAlign ];
+
+(* Please specify if the theory conserves charge-parity (CP) in the scalar sector: "yes' or "no" *)
+
+CPConservation = "yes";
+
+If[ CPConservation == "yes",
+    RuleCP = RuleCPConserve;
+    M$HiggsFields = M$HiggsFieldsCPC;
+    
+    ,
+    
+    M$HiggsFields = M$HiggsFieldsCPV;
+    
+];
+
+M$ClassesDescription = Join[M$ClassesDescription, M$HiggsFields];
+
