@@ -187,7 +187,6 @@ Rule2hdmTypeIsp = { Ye1[a_,b_] -> 0,
         
                     Cphie12[a_,b_] -> 0,
                     Cphil121[a_,b_] -> 0,
-            
                     Cphil123[a_,b_] -> 0,
                     Cphid12[a_,b_] -> 0,
                     Cphiu12[a_,b_] -> 0,
@@ -214,8 +213,8 @@ Rule2hdmTypeIIsp = { Ye2[a_,b_] -> 0,
 
                      Cuphi111[a_,b_] -> 0,
                      Cuphi122[a_,b_] -> 0,
-                     Cuphi211[a_,b_] -> 0,
-                     Cuphi222[a_,b_] -> 0,
+                     Cuphi221[a_,b_] -> 0,
+                     Cuphi212[a_,b_] -> 0,
                
                      ClBphi2[a_,b_] -> 0,
                      ClWphi2[a_,b_] -> 0,

@@ -1241,6 +1241,14 @@ For[i = 1,i < np + 1, i++,
 ];
        
 
+(* Condition which omits conjugate vertices (ebar nu and dbar u) and electroweak vertices involving only the down-type vertices except for the photon and the Z (since they are identical to charged lepton vertices upon relacing e -> d and l -> q in the labelings)
+ 
+   Refer to Appendix (or Supplemental material )
+ 
+ *)
+       
+(*
+ 
 If[ (ToString[frule[[1, 1, 1]]] == "lbar" && ToString[frule[[1, 2, 1]]] == "vl") ||
     (ToString[frule[[1, 1, 1]]] == "dqbar" && ToString[frule[[1, 2, 1]]] == "uq") ||
     (ToString[frule[[1, 2, 1]]] == "lc") ||
@@ -1252,6 +1260,12 @@ If[ (ToString[frule[[1, 1, 1]]] == "lbar" && ToString[frule[[1, 2, 1]]] == "vl")
      (ToString[frule[[1, 3, 1]]] != "G" && ToString[frule[[1, 4, 1]]] != "G" && ToString[frule[[1, 5, 1]]] != "G" ))
     , None,
     
+    (* Put following lines here *)
+
+];
+ 
+*)
+       
     DrawFeynmanDiagram[LineList, FieldList, cfile, frule, vname];
        
     WriteString[cfile, "\\bigskip\n\n"];
@@ -1260,9 +1274,7 @@ If[ (ToString[frule[[1, 1, 1]]] == "lbar" && ToString[frule[[1, 2, 1]]] == "vl")
     
     WriteString[vfile, ToLaTeX[frule[[2]], DiagType, verbose, frule[[1]] ] ];
     Close[vfile];
-    
-  ];
-];
+
 (* end of DrawDiagram *)
 ];
 
